@@ -29,7 +29,11 @@ namespace DRL.Engine.GrafringSystem { }
 namespace DRL.Engine.ItemManagmentSystem { }
 namespace DRL.Engine.BloodSystem { }
 
-namespace DRL.GameEngine.ECS.Entities { }
-namespace DRL.GameEngine.ECS.Pathfinding { }
+namespace DRL.Engine.ECS.Entities { }
+namespace DRL.Engine.ECS.Components { }
+namespace DRL.Engine.ECS.Systems { }
+namespace DRL.Engine.ECS.Systems.Effects { }
+namespace DRL.Engine.ECS.Pathfinding { }
+namespace DRL.Engine.JobSystem { }
+
 namespace DRL.Utils { }
-namespace DRL.GameEngine.ECS.Systems.Effects { }
