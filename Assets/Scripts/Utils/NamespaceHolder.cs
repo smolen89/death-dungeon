@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
 //public class NamespaceHolder : MonoBehaviour
@@ -20,28 +21,23 @@ using UnityEngine;
 //    }
 //}
 
-namespace DRL { }
-namespace DRL.Engine { }
-namespace DRL.Engine.Systems { }
-namespace DRL.Engine.Utils { }
+namespace RDE { }
+namespace RDE.Engine { }
+namespace RDE.Engine.Systems { }
+namespace RDE.Engine.Utils { }
 
+namespace RDE.Engine.ECS.Entities { }
+namespace RDE.Engine.ECS.Components { }
+namespace RDE.Engine.ECS.Systems { }
+namespace RDE.Engine.ECS.Pathfinding { }
+namespace RDE.Engine.Jobs { }
 
-
-namespace DRL.Engine.ECS.Entities { }
-namespace DRL.Engine.ECS.Components { }
-namespace DRL.Engine.ECS.Systems { }
-namespace DRL.Engine.ECS.Pathfinding { }
-namespace DRL.Engine.Jobs { }
-
-namespace DRL.Utils { }
+namespace RDE.Utils { }
 
 [System.Serializable]
-public struct MoveSpeed : IComponentData
+public struct MoveComponent : IComponentData
 {
-	public void OnUpdate() => throw new System.NotImplementedException();
+	public Direction direction;
 }
 
-public interface IComponentData
-{
-	void OnUpdate();
-}
+
