@@ -8,18 +8,12 @@ public class Globals
 	/// <summary>
 	/// Globalna kalkulacja odległości.
 	/// </summary>
-	public static DistanceMetric DefaultMetric = DistanceMetric.Chebyshev;
+	public static DistanceMetric DefaultMetric = DistanceMetric.Euclidean;
 
 	/// <summary>
 	/// Wersja klienta. Wersjonowanie w wersji dev: Minion jak jakiś modół zostanie dodany major 1 będzie dopiero jak będzie to grywalne (przynajmniej demo)
 	/// </summary>
-	public readonly static GameVersion GameVersion = new GameVersion()
-	{
-		Major = 0,
-		Minion = 1,
-		Revision = 0,
-		Suffix = "Dev Alpla"
-	};	//todo ogarnąć w jaki sposób mamy wersjonować projekt
+	public const string GameVersion = "v0.0.1 proto";
 
 	/// <summary>
 	/// Maksymalny poziom Dungeonu.
