@@ -5,8 +5,17 @@ using UnityEngine;
 
 public enum DistanceMetric
 {
+	/// <summary>
+	/// Nie liczy skosów, tylko góra dół oraz lewo i prawo.
+	/// </summary>
 	Manhattan,
+	/// <summary>
+	/// To będzie to
+	/// </summary>
 	Euclidean,
+	/// <summary>
+	/// Chessboard distance
+	/// </summary>
 	Chebyshev
 }
 
