@@ -277,7 +277,7 @@ public static class VecExtensions
 		{
 			for( int i = 0; i < 8; i++ )
 			{
-				if (condition(source + Direction.N.Rotate8Way( i, true ) ) )
+				if (condition(source + Direction.Up.Rotate8Way( i, true ) ) )
 				{
 					count++;
 				}

@@ -13,9 +13,9 @@ public static class ListExtensions
 	}
 
 	// Prawdopodobnie IList załatwił sprawę, choć Linq się może przydać
-	//public static T GetRandom<T>(this IEnumerable<T> source )
-	//{
-	//	int index = Random.Range(0,source.Count());
-	//	return source.ToArray()[index];
-	//}
+	public static T GetRandom<T>( this IEnumerable<T> source )
+	{
+		int index = Random.Range(0,source.Count());
+		return source.ToArray()[ index ];
+	}
 }

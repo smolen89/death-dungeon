@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RDE.Engine.Systems
+namespace RD.Engine.Systems.Events
 {
 	public abstract class GameEvent<T> where T: GameEvent<T>
 	{

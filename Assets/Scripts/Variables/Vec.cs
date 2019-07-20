@@ -3,83 +3,65 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// A 2D integer vector class. Similar to Point but not dependent on System.Drawing and much more
-/// feature-rich.
-/// </summary>
 [Serializable]
-public struct Vec : IEquatable<Vec>, IComparable<Vec>
+public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec>
 {
-	/// <summary>
-	/// Koordynata X (Szerokość)
-	/// </summary>
-	public int x;
-
-	/// <summary>
-	/// Koordynata Y (Wysokość)
-	/// </summary>
-	public int y;
+	public readonly int x;
+	public readonly int y;
 
 	#region Constructors
 
-	/// <summary>
-	/// Initializes a new instance of Vec with the given coordinates.
-	/// </summary>
-	/// <param name="x">X coordinate.</param>
-	/// <param name="y">Y coordinate.</param>
 	public Vec( int x = 0, int y = 0 )
 	{
 		this.x = x;
 		this.y = y;
 	}
 
-	/// <summary>
-	/// Initializes a new instance of Vec with the given coordinates.
-	/// </summary>
-	/// <param name="size">X and Y coordinate.</param>
-	public Vec( int size = 0 ) : this( size, size )
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of Vec with the given coordinates.
-	/// </summary>
-	/// <param name="x">X coordinate.</param>
-	/// <param name="y">Y coordinate.</param>
-	public Vec( float x, float y ) : this( (int)x, (int)y )
-	{
-	}
-
-	/// <summary>
-	/// Initializes a new instance of Vec
-	/// </summary>
-	/// <param name="other">Other vector.</param>
-	public Vec( Vec other ) : this( other.x, other.y )
-	{
-	}
+	public Vec( int size = 0 ) : this( size, size ) { }
+	public Vec( float x, float y ) : this( (int)x, (int)y ) { }
+	public Vec( Vec other ) : this( other.x, other.y ) { }
 
 	#endregion Constructors
 
 	#region Operators
 
 	public static bool operator ==( Vec a, Vec b ) => a.x == b.x && a.y == b.y;
-	public static bool operator !=( Vec a, Vec b ) => !( a == b );
-
 	public static bool operator ==( Vec a, Vector2 b ) => a.x == b.x && a.y == b.y;
-	public static bool operator !=( Vec a, Vector2 b ) => !( a == b );
-
 	public static bool operator ==( Vec a, Vector2Int b ) => a.x == b.x && a.y == b.y;
-	public static bool operator !=( Vec a, Vector2Int b ) => !( a == b );
-
 	public static bool operator ==( Vec a, Vector3 b ) => a.x == b.x && a.y == b.y;
-	public static bool operator !=( Vec a, Vector3 b ) => !( a == b );
-
 	public static bool operator ==( Vec a, Vector3Int b ) => a.x == b.x && a.y == b.y;
+	public static bool operator ==( Vec a, (int x, int y) tuple ) => a.x == tuple.x && a.y == tuple.y;
+	public static bool operator ==( (int x, int y) tuple, Vec b ) => tuple.x == b.x && tuple.y == b.y;
+
+	public static bool operator !=( Vec a, Vec b ) => !( a == b );
+	public static bool operator !=( Vec a, Vector2 b ) => !( a == b );
+	public static bool operator !=( Vec a, Vector2Int b ) => !( a == b );
+	public static bool operator !=( Vec a, Vector3 b ) => !( a == b );
 	public static bool operator !=( Vec a, Vector3Int b ) => !( a == b );
+	public static bool operator !=( Vec c, (int x, int y) tuple ) => !( c == tuple );
+	public static bool operator !=( (int x, int y) tuple, Vec c ) => !( tuple == c );
 
 
 	public static Vec operator +( Vec a, Vec b ) => new Vec( a.x + b.x, a.y + b.y );
+	public static Vec operator +( Vec c, (int x, int y) tuple ) => new Vec( c.x + tuple.x, c.y + tuple.y );
+	public static Vec operator +( Vec a, Vector2 b ) => new Vec( a.x + b.x, a.y + b.y );
+	public static Vec operator +( Vec a, Vector2Int b ) => new Vec( a.x + b.x, a.y + b.y );
+	public static Vec operator +( Vec a, Vector3 b ) => new Vec( a.x + b.x, a.y + b.y );
+	public static Vec operator +( Vec a, Vector3Int b ) => new Vec( a.x + b.x, a.y + b.y );
+
+
 	public static Vec operator -( Vec a, Vec b ) => new Vec( a.x - b.x, a.y - b.y );
+	public static Vec operator -( Vec c, (int x, int y) tuple ) => new Vec( c.x - tuple.x, c.y - tuple.y );
+
+	public static (int x, int y) operator +( (int x, int y) tuple, Vec c ) => (tuple.x + c.x, tuple.y + c.y);
+	public static Vector2 operator +( Vector2 a, Vec b ) => new Vector2( a.x + b.x, a.y + b.y );
+	public static Vector2Int operator +( Vector2Int a, Vec b ) => new Vector2Int( a.x + b.x, a.y + b.y );
+	public static Vector3 operator +( Vector3 a, Vec b ) => new Vector3( a.x + b.x, 0, a.y + b.y );
+	public static Vector3Int operator +( Vector3Int a, Vec b ) => new Vector3Int( a.x + b.x, 0, a.y + b.y );
+
+
+	public static (int x, int y) operator -( (int x, int y) tuple, Vec c ) => (tuple.x - c.x, tuple.y - c.y);
+
 
 	public static Vec operator +( Vec v1, int i2 ) => new Vec( v1.x + i2, v1.y + i2 );
 	public static Vec operator -( Vec v1, int i2 ) => new Vec( v1.x - i2, v1.y - i2 );
@@ -89,19 +71,6 @@ public struct Vec : IEquatable<Vec>, IComparable<Vec>
 	public static Vec operator +( int i1, Vec v2 ) => new Vec( i1 + v2.x, i1 + v2.y );
 	public static Vec operator -( int i1, Vec v2 ) => new Vec( i1 - v2.x, i1 - v2.y );
 	public static Vec operator *( int i1, Vec v2 ) => new Vec( i1 * v2.x, i1 * v2.y );
-
-	public static Vector2 operator +( Vector2 a, Vec b ) => new Vector2( a.x + b.x, a.y + b.y );
-	public static Vec operator +( Vec a, Vector2 b ) => new Vec( a.x + b.x, a.y + b.y );
-
-	public static Vector2Int operator +( Vector2Int a, Vec b ) => new Vector2Int( a.x + b.x, a.y + b.y );
-	public static Vec operator +( Vec a, Vector2Int b ) => new Vec( a.x + b.x, a.y + b.y );
-
-	public static Vector3 operator +( Vector3 a, Vec b ) => new Vector3( a.x + b.x,0, a.y + b.y );
-	public static Vec operator +( Vec a, Vector3 b ) => new Vec( a.x + b.x, a.y + b.y );
-
-	public static Vector3Int operator +( Vector3Int a, Vec b ) => new Vector3Int( a.x + b.x,0, a.y + b.y );
-	public static Vec operator +( Vec a, Vector3Int b ) => new Vec( a.x + b.x, a.y + b.y );
-
 	#endregion Operators
 
 	#region Implicit operators
@@ -122,6 +91,9 @@ public struct Vec : IEquatable<Vec>, IComparable<Vec>
 	public static implicit operator Vector3Int( Vec value ) => new Vector3Int( value.x, 0, value.y );
 	public static implicit operator Vec( Vector3Int vec ) => new Vec( vec.x, vec.y );
 
+	// tuple
+	public static implicit operator (int x, int y) ( Vec vec ) => (vec.x, vec.y);
+	public static implicit operator Vec( (int x, int y) tuple ) => new Vec( tuple.x, tuple.y );
 	#endregion Implicit operators
 
 	#region Functions
@@ -187,54 +159,24 @@ public struct Vec : IEquatable<Vec>, IComparable<Vec>
 		return ( Math.Abs( offset.x ) <= 1 ) && ( Math.Abs( offset.y ) <= 1 );
 	}
 
-	/// <summary>
-	/// Returns a new Vec whose coordinates are the coordinates of this Vec
-	/// with the given values added. This Vec is not modified.
-	/// </summary>
-	/// <param name="x">Distance to offset the X coordinate.</param>
-	/// <param name="y">Distance to offset the Y coordinate.</param>
-	/// <returns>A new Vec offset by the given coordinates.</returns>
 	public Vec Offset( int x, int y ) => new Vec( this.x + x, this.y + y );
 
-	/// <summary>
-	/// Returns a new Vec whose coordinates are the coordinates of this Vec
-	/// with the given value added to the X coordinate. This Vec is not modified.
-	/// </summary>
-	/// <param name="offset">Distance to offset the X coordinate.</param>
-	/// <returns>A new Vec offset by the given X coordinate.</returns>
 	public Vec OffsetX( int offset ) => new Vec( x + offset, y );
 
-	/// <summary>
-	/// Returns a new Vec whose coordinates are the coordinates of this Vec
-	/// with the given value added to the Y coordinate. This Vec is not modified.
-	/// </summary>
-	/// <param name="offset">Distance to offset the Y coordinate.</param>
-	/// <returns>A new Vec offset by the given Y coordinate.</returns>
 	public Vec OffsetY( int offset ) => new Vec( x, y + offset );
+
+	public int ToIndex( int width ) => y * width + x;
 
 	#endregion Functions
 
 	#region Static Functions
 
-	/// <summary>
-	/// Pobiera wektor 1x1
-	/// </summary>
 	public static readonly Vec One = new Vec( 1, 1 );
-
-	/// <summary>
-	/// Pobiera wektor zerowy
-	/// </summary>
 	public static readonly Vec Zero = new Vec( 0, 0 );
-
-	/// <summary>
-	/// Zwraca najmniejsze wartości x i y z dwóch Vec.
-	/// </summary>
+	public static readonly Vec None = new Vec( int.MinValue, int.MinValue );
 	public static Vec Min( Vec a, Vec b ) => new Vec( Math.Min( a.x, b.x ), Math.Min( a.y, b.y ) );
-
-	/// <summary>
-	/// Zwraca największe wartości x i y z dwóch Vec.
-	/// </summary>
 	public static Vec Max( Vec a, Vec b ) => new Vec( Math.Max( a.x, b.x ), Math.Max( a.y, b.y ) );
+	public static Vec ToVec( int index, int width ) => new Vec( index % width, index / width );
 
 	#endregion Static Functions
 
@@ -267,6 +209,7 @@ public struct Vec : IEquatable<Vec>, IComparable<Vec>
 	}
 
 	public bool Equals( Vec other ) => other == this;
+	public bool Equals( (int x, int y) other ) => x == other.x && y == other.y;
 
 	public override bool Equals( object obj )
 	{
@@ -278,9 +221,15 @@ public struct Vec : IEquatable<Vec>, IComparable<Vec>
 		return false;
 	}
 
+	public void Deconstruct( out int x, out int y )
+	{
+		x = this.x;
+		y = this.y;
+	}
+
 	#endregion IComparable<Vec2>, IEquatable<Vec2>
 
 	public override int GetHashCode() => ( ( x.GetHashCode() ^ ( y.GetHashCode() << 1 ) ) >> 1 );
 
-	public override string ToString() => $"[{x}x{y}]";
+	public override string ToString() => $"[{x},{y}]";
 }

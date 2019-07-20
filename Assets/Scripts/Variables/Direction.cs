@@ -22,16 +22,32 @@ public struct Direction : IEquatable<Direction>
 	/// <summary>
 	/// Gets the "none" direction.
 	/// </summary>
-	public static Direction None => new Direction( Vec.Zero );
+	public static Direction None
+		=> new Direction( (0, 0) );
 
-	public static Direction N => new Direction( new Vec( 0, 1 ) );
-	public static Direction NE => new Direction( new Vec( 1, 1 ) );
-	public static Direction E => new Direction( new Vec( 1, 0 ) );
-	public static Direction SE => new Direction( new Vec( 1, -1 ) );
-	public static Direction S => new Direction( new Vec( 0, -1 ) );
-	public static Direction SW => new Direction( new Vec( -1, -1 ) );
-	public static Direction W => new Direction( new Vec( -1, 0 ) );
-	public static Direction NW => new Direction( new Vec( -1, 1 ) );
+	public static Direction Up
+		=> new Direction( (0, 1) );
+
+	public static Direction UpRight
+		=> new Direction( (1, 1) );
+
+	public static Direction Right
+		=> new Direction( (1, 0) );
+
+	public static Direction DownRight
+		=> new Direction( (1, -1) );
+
+	public static Direction Down
+		=> new Direction( (0, -1) );
+
+	public static Direction DownLeft
+		=> new Direction( (-1, -1) );
+
+	public static Direction Left
+		=> new Direction( (-1, 0) );
+
+	public static Direction UpLeft
+		=> new Direction( (-1, 1) );
 
 	#endregion static directions
 
@@ -60,23 +76,64 @@ public struct Direction : IEquatable<Direction>
 	#endregion Operators
 
 	/// <summary>
-	/// Enumerates the directions in clockwise order, starting with <see cref="N"/>.
+	/// Enumerates the directions in clockwise order, starting with <see cref="Up"/>.
 	/// </summary>
-	public static IList<Direction> Clockwise => new List<Direction> { N, NE, E, SE, S, SW, W, NW };
+	public static IEnumerable<Direction> Clockwise()
+	{
+		yield return Up;
+		yield return UpRight;
+		yield return Right;
+		yield return DownRight;
+		yield return Down;
+		yield return DownLeft;
+		yield return Left;
+		yield return UpLeft;
+	}
 
 	/// <summary>
-	/// Enumerates the directions in counterclockwise order, starting with <see cref="N"/>.
+	/// Enumerates the directions in counterclockwise order, starting with <see cref="Up"/>.
 	/// </summary>
-	public static IList<Direction> Counterclockwise => new List<Direction> { N, NW, W, SW, S, SE, E, NE };
-
+	public static IEnumerable<Direction> CounterClockwise()
+	{
+		yield return Up;
+		yield return UpLeft;
+		yield return Left;
+		yield return DownLeft;
+		yield return Down;
+		yield return DownRight;
+		yield return Right;
+		yield return UpRight;
+	}
 	/// <summary>
 	/// Enumerates the four main compass directions.
 	/// </summary>
-	public static IList<Direction> FourDirections => new List<Direction> { N, S, E, W };
+	public static IEnumerable<Direction> FourDirections()
+	{
+		yield return Up;
+		yield return Down;
+		yield return Right;
+		yield return Left;
+	}
 
-	public static IList<Direction> EightDirections => new List<Direction> { N, NE, E, SE, S, SW, W, NW };
+	public static IEnumerable<Direction> EightDirections()
+	{
+		yield return Up;
+		yield return Down;
+		yield return Left;
+		yield return Right;
+		yield return UpLeft;
+		yield return UpRight;
+		yield return DownLeft;
+		yield return DownRight;
+	}
 
-	public static IList<Direction> DiagonalDirections => new List<Direction> { NE, SE, SW, NW };
+	public static IEnumerable<Direction> DiagonalDirections()
+	{
+		yield return UpLeft;
+		yield return UpRight;
+		yield return DownLeft;
+		yield return DownRight;
+	}
 
 	public Direction Rotate8Way( int times, bool clockwise = true )
 	{
@@ -110,9 +167,9 @@ public struct Direction : IEquatable<Direction>
 		return direction;
 	}
 
-	public Direction Rotate(bool clockwise = true )
+	public Direction Rotate( bool clockwise = true )
 	{
-		if (Globals.DefaultMetric == DistanceMetric.Chebyshev )
+		if( Globals.DefaultMetric == DistanceMetric.Chebyshev )
 		{
 			return clockwise ? Next : Previous;
 		}
@@ -129,14 +186,15 @@ public struct Direction : IEquatable<Direction>
 	/// <returns>Direction</returns>
 	public static Direction Towards( Vec position )
 	{
-		Vec offset = Vec.Zero;
+		int offsetX = 0;
+		int offsetY = 0;
 
-		if( position.x < 0 ) offset.x = -1;
-		if( position.x > 0 ) offset.x = 1;
-		if( position.y < 0 ) offset.y = -1;
-		if( position.y > 0 ) offset.y = 1;
+		if( position.x < 0 ) offsetX = -1;
+		if( position.x > 0 ) offsetX = 1;
+		if( position.y < 0 ) offsetY = -1;
+		if( position.y > 0 ) offsetY = 1;
 
-		return new Direction( offset );
+		return new Direction( (offsetX, offsetY) );
 	}
 
 	/// <summary>
@@ -147,14 +205,14 @@ public struct Direction : IEquatable<Direction>
 	{
 		get
 		{
-			if( this == N ) return NE;
-			else if( this == NE ) return E;
-			else if( this == E ) return SE;
-			else if( this == SE ) return S;
-			else if( this == S ) return SW;
-			else if( this == SW ) return W;
-			else if( this == W ) return NW;
-			else if( this == NW ) return N;
+			if( this == Up ) return UpRight;
+			else if( this == UpRight ) return Right;
+			else if( this == Right ) return DownRight;
+			else if( this == DownRight ) return Down;
+			else if( this == Down ) return DownLeft;
+			else if( this == DownLeft ) return Left;
+			else if( this == Left ) return UpLeft;
+			else if( this == UpLeft ) return Up;
 			else return None;
 		}
 	}
@@ -167,14 +225,14 @@ public struct Direction : IEquatable<Direction>
 	{
 		get
 		{
-			if( this == N ) return NW;
-			else if( this == NE ) return N;
-			else if( this == E ) return NE;
-			else if( this == SE ) return E;
-			else if( this == S ) return SE;
-			else if( this == SW ) return S;
-			else if( this == W ) return SW;
-			else if( this == NW ) return W;
+			if( this == Up ) return UpLeft;
+			else if( this == UpRight ) return Up;
+			else if( this == Right ) return UpRight;
+			else if( this == DownRight ) return Right;
+			else if( this == Down ) return DownRight;
+			else if( this == DownLeft ) return Down;
+			else if( this == Left ) return DownLeft;
+			else if( this == UpLeft ) return Left;
 			else return None;
 		}
 	}
@@ -185,7 +243,7 @@ public struct Direction : IEquatable<Direction>
 
 	public Direction Rotate180 => new Direction( offset * -1 );
 
-	public Direction RandomDirection() => Globals.DefaultMetric == DistanceMetric.Manhattan ? FourDirections.GetRandom() : EightDirections.GetRandom();
+	public Direction RandomDirection() => Globals.DefaultMetric == DistanceMetric.Manhattan ? FourDirections().GetRandom() : EightDirections().GetRandom();
 
 	#region IEquatable<Direction> Members
 
@@ -203,14 +261,14 @@ public struct Direction : IEquatable<Direction>
 
 	public override string ToString()
 	{
-		if( this == N ) return "N";
-		else if( this == NE ) return "NE";
-		else if( this == E ) return "E";
-		else if( this == SE ) return "SE";
-		else if( this == S ) return "S";
-		else if( this == SW ) return "SW";
-		else if( this == W ) return "W";
-		else if( this == NW ) return "NW";
+		if( this == Up ) return "N";
+		else if( this == UpRight ) return "NE";
+		else if( this == Right ) return "E";
+		else if( this == DownRight ) return "SE";
+		else if( this == Down ) return "S";
+		else if( this == DownLeft ) return "SW";
+		else if( this == Left ) return "W";
+		else if( this == UpLeft ) return "NW";
 		else if( this == None ) return "None";
 
 		return Offset.ToString();
@@ -220,29 +278,29 @@ public struct Direction : IEquatable<Direction>
 
 	#endregion IEquatable<Direction> Members
 
-	public static implicit operator int(Direction value )
+	public static implicit operator int( Direction value )
 	{
-		if( value == N ) return 8;
-		else if( value == NE ) return 9;
-		else if( value == E ) return 6;
-		else if( value == SE ) return 3;
-		else if( value == S ) return 2;
-		else if( value == SW ) return 1;
-		else if( value == W ) return 4;
-		else if( value == NW ) return 7;
+		if( value == Up ) return 8;
+		else if( value == UpRight ) return 9;
+		else if( value == Right ) return 6;
+		else if( value == DownRight ) return 3;
+		else if( value == Down ) return 2;
+		else if( value == DownLeft ) return 1;
+		else if( value == Left ) return 4;
+		else if( value == UpLeft ) return 7;
 		else return 0;
 	}
 
-	public static implicit operator Direction (int value )
+	public static implicit operator Direction( int value )
 	{
-		if( value == 8 ) return N;
-		else if( value == 9 ) return NE;
-		else if( value == 6 ) return E;
-		else if( value == 3 ) return SE;
-		else if( value == 2 ) return S;
-		else if( value == 1 ) return SW;
-		else if( value == 4 ) return W;
-		else if( value == 7 ) return NW;
+		if( value == 8 ) return Up;
+		else if( value == 9 ) return UpRight;
+		else if( value == 6 ) return Right;
+		else if( value == 3 ) return DownRight;
+		else if( value == 2 ) return Down;
+		else if( value == 1 ) return DownLeft;
+		else if( value == 4 ) return Left;
+		else if( value == 7 ) return UpLeft;
 		else return None;
 	}
 }
