@@ -10,12 +10,7 @@ using UnityEngine.SceneManagement;
 		private void Awake()
 		{
 			DontDestroyOnLoad( gameObject );
-			SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+			SceneManager.sceneLoaded += ( Scene arg0, LoadSceneMode arg1 ) => Messenger.Cleanup();
 		}
 
-		//Clean up eventTable every time a new level loads.
-		private void SceneManager_sceneLoaded( Scene arg0, LoadSceneMode arg1 )
-		{
-			Messenger.Cleanup();
-		}
-	}
+}
