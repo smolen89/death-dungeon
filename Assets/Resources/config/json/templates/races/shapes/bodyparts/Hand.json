@@ -1,0 +1,12 @@
+{
+    "Id": "Hand",
+    "BaseTemplates": ["BodyPart"],
+    "Components":
+    [
+       "BodyPart",
+       "PermitsMaleAttack",
+       {"Capability":"HandleDoors"},
+       {"Volume":10},
+       {"Weight":1000}
+    ]
+ }

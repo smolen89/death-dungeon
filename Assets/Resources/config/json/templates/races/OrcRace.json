@@ -1,0 +1,27 @@
+{
+    "Id":"OrcRace",
+    "BaseTemplates":"Humanoid",
+    "Components":
+    [
+       {
+          "Labeled":
+          {
+             "singular":"OrcRaceSingularNane",
+             "plural":"OrcRacePluralName"
+          }
+       },
+       {"Strength":"=2d3+7"},
+       {"Learning":"=2d3+4"},
+       {"Willpower":"=2d2+7"},
+       {"Dexterity":"=2d2+7"},
+       {"Toughness":"=2d3+7"},
+       {"Charisma":"=1d4+5"},
+       {"Appearance":"=1d4+4"},
+       {"Perception":"=2d2+7"},
+       {"Mana":"=1d3+4"},
+       {"Size":"Medium"},
+       {"UnaffectedBy":"Darkness"},
+       {"RacialAttribute":"OrcishRaclialAttribute"},
+    ],
+    "Types":["Race"]
+ }

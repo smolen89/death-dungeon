@@ -1,0 +1,19 @@
+{
+    "Id": "HumanoidHand",
+    "BaseTemplates": ["Hand"],
+    "Components":
+    [
+       "BodyPartContentSlot",
+       {
+           "permissibleTypes": ["MaleeWeapon", "Shield"],
+           "statusWhenContained": "Wielded",
+           "amputationReactionProbability": 80,
+           "canFumble": true,
+           "longAmpitationReaction":"HumanoidHandLongAmputationReaction",
+           "shortAmpitationReaction":"HumanoidHandShortAmputationReaction",
+           "longStorageMessage":"HumanoidHandLongStorageMessage",
+           "shortStorageMessage":"HumanoidHandShortStorageMessage",
+           "longCurrentlyStoredMessage":"HumanoidHandLongCurrentlyStoredMessage"
+       }
+    ]
+ }

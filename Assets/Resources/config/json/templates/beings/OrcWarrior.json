@@ -1,0 +1,11 @@
+{
+    "Id": "OrcWarrior",
+    "BaseTemplates": ["Being"],
+    "Components":
+    [
+       {"DefaultEquipment": ["BattleAce","MetalCap","LeatherArmor","WoodenShield","LeatherBoots"]},
+       {"Slot": {"template":"Warrior", "name":"Profession"}},
+       {"Slot": { "template":"OrcRace", "name":"Race"}},
+       {"GloalDriven": "KillPlayer"}
+    ]
+ }

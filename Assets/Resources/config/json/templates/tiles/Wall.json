@@ -1,0 +1,16 @@
+{
+    "Id": "Wall",
+    "BaseTemplates": ["Tile"],
+    "Components":
+    [
+       {"RelativeSize": "Huge"},
+       "Solid",
+       {
+          "Slot":
+          {
+             "template": "Stone",
+             "name": "Material"
+          }
+       }
+    ]
+ }

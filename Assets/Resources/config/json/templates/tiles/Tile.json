@@ -1,0 +1,8 @@
+{
+   "Id": "Tile",
+   "BaseTemplates": ["Thing"],
+   "Components":
+   [
+      {"Size": "Medium"}
+   ]
+}
