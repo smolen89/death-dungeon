@@ -6,22 +6,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RD.Engine.Systems.Events
+namespace RD.GameEngine.Events.Sandbox
 {
-	public abstract class GameEvent<T> where T: GameEvent<T>
+	public abstract class GameEvent<T>  where T : GameEvent<T> 
 	{
 		private bool hasFired;
 		private static event EventListener listeners;
 
 		public string Description;
 		public delegate void EventListener( T info );
-		
-		public static void RegisterListener(EventListener listener )
+
+		public static void RegisterListener( EventListener listener )
 		{
 			listeners += listener;
 		}
 
-		public static void UnregisterListener(EventListener listener )
+		public static void UnregisterListener( EventListener listener )
 		{
 			listeners -= listener;
 		}
@@ -38,18 +38,5 @@ namespace RD.Engine.Systems.Events
 
 			listeners?.Invoke( this as T );
 		}
-	} 
-
-	public class DebugEvent : GameEvent<DebugEvent>
-	{
-		public int VerbosityLevel;
 	}
-
-	public class UnitDeathEvent : GameEvent<UnitDeathEvent>
-	{
-		public GameObject UnitGO;
-		// Info about cause of death, our killer, etc..
-		// Could be a struct, readonly, etc..
-	}
-
 }
