@@ -4,19 +4,17 @@ namespace RD.ECS.Message
 {
 	internal static class Publisher
 	{
-		public static void Publish<TMessage>( int worldID, in TMessage message ) => Publisher<TMessage>.Publish( worldID, message );
+		public static void Publish<TMessage>( in TMessage message ) => Publisher<TMessage>.Publish( message );
 	}
 
 	internal static class Publisher<T>
 	{
 		private readonly struct Listener : IDisposable
 		{
-			private readonly int worldID;
 			private readonly ActionIn<T> action;
 
-			public Listener( int worldID, ActionIn<T> action )
+			public Listener( ActionIn<T> action )
 			{
-				this.worldID = worldID;
 				this.action = action;
 			}
 
@@ -24,21 +22,21 @@ namespace RD.ECS.Message
 			{
 				lock( _lockObject )
 				{
-					Actions[ worldID ] -= action;
+					Actions -= action;
 				}
 			}
 		}
 
 		private static readonly object _lockObject;
-		public static ActionIn<T>[] Actions;
+		public static ActionIn<T> Actions;
 
 		static Publisher()
 		{
 			_lockObject = new object();
-			Actions = new ActionIn<T>[ 2 ];
+			Actions = null;
 			if( typeof( T ) != typeof( WorldDisposedMessage ) )
 			{
-				Publisher<WorldDisposedMessage>.RegisterListener( 0, On );
+				Publisher<WorldDisposedMessage>.RegisterListener( On );
 			}
 		}
 
@@ -46,29 +44,22 @@ namespace RD.ECS.Message
 		{
 			lock( _lockObject )
 			{
-				if( message.WorldID < Actions.Length )
-				{
-					Actions[ message.WorldID ] = null;
-				}
+				Actions = null;
 			}
 		}
 
-		public static IDisposable RegisterListener( int worldID, ActionIn<T> action )
+		public static IDisposable RegisterListener( ActionIn<T> action )
 		{
 			lock( _lockObject )
 			{
-				ArrayExtension.EnsureLength( ref Actions, worldID );
-				Actions[ worldID ] += action;
+				Actions += action;
 			}
-			return new Listener( worldID, action );
+			return new Listener( action );
 		}
 
-		public static void Publish( int worldID, in T message )
+		public static void Publish( in T message )
 		{
-			if( worldID < Actions.Length )
-			{
-				Actions[ worldID ]?.Invoke( message );
-			}
+			Actions?.Invoke( message );
 		}
 	}
 }

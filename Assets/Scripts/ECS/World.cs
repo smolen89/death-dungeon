@@ -11,15 +11,9 @@ namespace RD.ECS
 {
 	public class World : IPublisher, IDisposable
 	{
-		public IDisposable RegisterListener<T>( ActionIn<T> action )
-		{
-			return Publisher<T>.RegisterListener( 0, action );
-		}
+		public IDisposable RegisterListener<T>( ActionIn<T> action ) => Publisher<T>.RegisterListener( action );
 
-		public void Publish<T>( in T message ) where T : IMessage
-		{
-			Publisher<T>.Publish( 0, message );
-		}
+		public void Publish<T>( in T message ) where T : IMessage => Publisher<T>.Publish( message );
 
 		public void Dispose()
 		{
