@@ -1,27 +1,25 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
-using UnityEngine;
-using System.Collections;
 
 public class Globals
 {
 	/// <summary>
-	/// Globalna kalkulacja odległości.
+	/// Distance global calculations.
 	/// </summary>
 	public static DistanceMetric DefaultMetric = DistanceMetric.Euclidean;
 
 	/// <summary>
-	/// Wersja klienta. Wersjonowanie w wersji dev: Minion jak jakiś modół zostanie dodany major 1 będzie dopiero jak będzie to grywalne (przynajmniej demo)
+	/// Client Version.
 	/// </summary>
 	public const string GameVersion = "v0.0.1 proto";
 
 	/// <summary>
-	/// Maksymalny poziom Dungeonu.
+	/// Max dungeon depth.
 	/// </summary>
 	public const int MaxDepth = 100;
 
 	/// <summary>
-	/// Maksymalna ilość dungeonów Licząc miastio
+	/// Max all dungeons with Towns
 	/// </summary>
 	public const int MaxDungeons = 20;
 }

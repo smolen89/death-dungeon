@@ -40,7 +40,7 @@ public static class Distances
 		}
 	}
 
-	public static int CalculateDistance( int from_x, int from_y, int target_x, int target_y )
+	public static int CalculateDistance(int from_x, int from_y, int target_x, int target_y )
 	{
 		switch( Globals.DefaultMetric )
 		{

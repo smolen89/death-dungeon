@@ -22,6 +22,7 @@ namespace RD.ECS.Components
 
 	public struct IsEnabled : IComponent
 	{
+		
 	}
 
 	public struct IsAlive : IComponent
