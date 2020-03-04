@@ -47,6 +47,7 @@ public class Rand : ISerializationCallbackReceiver
 	//int xCoord = new Vec().GetHashCode();
 	//int rewardID = GetRewardID(seed,xCoord,numDiffrentRewards);
 
+	// ReSharper disable once InconsistentNaming
 	public float value
 	{
 		get
@@ -127,7 +128,7 @@ public class Rand : ISerializationCallbackReceiver
 
 	public bool Chance( int probabilityFactor, int probabilitySpace )
 	{
-		return Range( probabilitySpace ) < probabilityFactor ? true : false;
+		return Range( probabilitySpace ) < probabilityFactor;
 	}
 
 	public List<T> Shuffle<T>( List<T> list )
@@ -263,9 +264,10 @@ public class Rand : ISerializationCallbackReceiver
 	public void OnAfterDeserialize()
 	{
 		random = new SRand( seed );
+		
 		for( int i = 0; i < count; i++ )
 		{
-			random.Next();
+			int unused = random.Next();
 		}
 	}
 }

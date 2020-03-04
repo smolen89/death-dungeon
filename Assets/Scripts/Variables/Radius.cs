@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class Radius
 {
@@ -17,10 +15,13 @@ public class Radius
 		this.radius = radius;
 		this.Bounds = bounds;
 		topLeft = centerPosition - radius;
-		int size = radius *2+1;
+		int size = radius * 2 + 1;
 		frontier = new VecArray<bool>( size, size );
 	}
-	public Radius( Vec centerPosition, int radius ) : this( centerPosition, radius, Rect.Empty ) { }
+
+	public Radius( Vec centerPosition, int radius ) : this( centerPosition, radius, Rect.Empty )
+	{
+	}
 
 
 	public Vec Center
@@ -41,11 +42,11 @@ public class Radius
 		get => radius;
 		set
 		{
-			if( value != radius )
+			if ( value != radius )
 			{
 				radius = value;
 				topLeft = centerPosition - radius;
-				int size = radius*2-1;
+				int size = radius * 2 - 1;
 				frontier = new VecArray<bool>( size, size );
 			}
 		}
@@ -54,7 +55,7 @@ public class Radius
 	public IEnumerable<Vec> CalculatePositions()
 	{
 		frontier.Fill( false );
-		frontier[ frontier.Width/ 2, frontier.Height / 2 ] = true;
+		frontier[ frontier.Width / 2, frontier.Height / 2 ] = true;
 
 		Queue<Vec> q = new Queue<Vec>();
 		q.Enqueue( centerPosition );
@@ -62,27 +63,28 @@ public class Radius
 		Vec current;
 		Vec localNeighbor;
 
-		while( q.Count != 0 )
+		while ( q.Count != 0 )
 		{
 			current = q.Dequeue();
+
 			yield return current;
 
-			foreach( Direction dir in Direction.EightDirections() )
+			foreach ( Direction dir in Direction.EightDirections() )
 			{
 				Vec neighbor = current + dir;
 				localNeighbor = neighbor + topLeft;
 
-				if( Distances.DistanceBetweenAdjacent( centerPosition, neighbor ) > radius || 
-					frontier[localNeighbor] || 
-					Bounds != Rect.Empty && Bounds.Contains( neighbor ) 
-					)
+				if ( Distances.DistanceBetweenAdjacent( centerPosition, neighbor ) > radius ||
+				     frontier[ localNeighbor ] ||
+				     Bounds != Rect.Empty && Bounds.Contains( neighbor )
+				)
 				{
 					continue;
 				}
+
 				q.Enqueue( neighbor );
 				frontier[ localNeighbor ] = true;
 			}
 		}
-
 	}
 }

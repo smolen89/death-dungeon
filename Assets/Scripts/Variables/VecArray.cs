@@ -2,7 +2,6 @@
 // Create by Ebbi Gebbi.
 using System.Collections;
 using System;
-using System.Linq;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -75,8 +74,8 @@ public class VecArray<T>
 	/// Gets and sets the array element at the given position.
 	/// </summary>
 	/// <param name="x">The X-coordinate of the element.</param>
-	/// <param name="x">The Y-coordinate of the element.</param>
-	/// <exception cref="IndexOutOfBoundsException">if the position is out of bounds.</exception>
+	/// <param name="y">The Y-coordinate of the element.</param>
+	/// <exception cref="IndexOutOfRangeException">if the position is out of bounds.</exception>
 	public T this[ int x, int y ]
 	{
 		get => array[ y * width + x ];
@@ -86,8 +85,8 @@ public class VecArray<T>
 	/// <summary>
 	/// Gets and sets the array element at the given position.
 	/// </summary>
-	/// <param name="pos">The position of the element. Must be within bounds.</param>
-	/// <exception cref="IndexOutOfBoundsException">if the position is out of bounds.</exception>
+	/// <param name="position">The position of the element. Must be within bounds.</param>
+	/// <exception cref="IndexOutOfRangeException">if the position is out of bounds.</exception>
 	public T this[ Vec position ]
 	{
 		get => array[ position.y * width + position.x ];
@@ -161,5 +160,5 @@ public class VecArray<T>
 
 	public IEnumerator GetEnumerator() => array.GetEnumerator();
 
-	public override string ToString() => $"VecArray<{typeof( T ).ToString()}> [{width}, {height}]";
+	public override string ToString() => $"VecArray<{typeof( T )}> [{width.ToString()}, {height.ToString()}]";
 }

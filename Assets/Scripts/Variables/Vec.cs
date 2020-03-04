@@ -1,12 +1,15 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
 using System;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 [Serializable]
 public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec>
 {
+	// ReSharper disable once InconsistentNaming
 	public readonly int x;
+	// ReSharper disable once InconsistentNaming
 	public readonly int y;
 
 	#region Constructors
@@ -26,9 +29,9 @@ public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec
 	#region Operators
 
 	public static bool operator ==( Vec a, Vec b ) => a.x == b.x && a.y == b.y;
-	public static bool operator ==( Vec a, Vector2 b ) => a.x == b.x && a.y == b.y;
+	public static bool operator ==( Vec a, Vector2 b ) => a.x == (int)b.x && a.y == (int)b.y;
 	public static bool operator ==( Vec a, Vector2Int b ) => a.x == b.x && a.y == b.y;
-	public static bool operator ==( Vec a, Vector3 b ) => a.x == b.x && a.y == b.y;
+	public static bool operator ==( Vec a, Vector3 b ) => a.x == (int)b.x && a.y == (int)b.y;
 	public static bool operator ==( Vec a, Vector3Int b ) => a.x == b.x && a.y == b.y;
 	public static bool operator ==( Vec a, (int x, int y) tuple ) => a.x == tuple.x && a.y == tuple.y;
 	public static bool operator ==( (int x, int y) tuple, Vec b ) => tuple.x == b.x && tuple.y == b.y;
@@ -159,6 +162,7 @@ public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec
 		return ( Math.Abs( offset.x ) <= 1 ) && ( Math.Abs( offset.y ) <= 1 );
 	}
 
+	[SuppressMessage( "ReSharper", "ParameterHidesMember" )]
 	public Vec Offset( int x, int y ) => new Vec( this.x + x, this.y + y );
 
 	public Vec OffsetX( int offset ) => new Vec( x + offset, y );
@@ -213,14 +217,15 @@ public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec
 
 	public override bool Equals( object obj )
 	{
-		if( obj is Vec )
+		if( obj is Vec vec )
 		{
-			return (Vec)obj == this;
+			return vec == this;
 		}
 
 		return false;
 	}
 
+	[SuppressMessage( "ReSharper", "ParameterHidesMember" )]
 	public void Deconstruct( out int x, out int y )
 	{
 		x = this.x;
@@ -231,5 +236,5 @@ public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec
 
 	public override int GetHashCode() => ( ( x.GetHashCode() ^ ( y.GetHashCode() << 1 ) ) >> 1 );
 
-	public override string ToString() => $"[{x},{y}]";
+	public override string ToString() => $"[{x.ToString()},{y.ToString()}]";
 }

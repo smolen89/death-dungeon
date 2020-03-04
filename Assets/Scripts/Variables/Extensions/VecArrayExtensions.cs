@@ -1,14 +1,15 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
-using System;
+
 using System.Collections.Generic;
 
 public static class VecArrayExtensions
 {
 	public static List<Vec> AllPositions<T>( this VecArray<T> array )
 	{
-		List<Vec> result = new List<Vec>();
-		array.Foreach( pos => result.Add( pos ) );
+		var _result = new List<Vec>();
+		array.Foreach( pos => _result.Add( pos ) );
+
 		//int width = array.Width;
 		//int height = array.Height;
 		//for( int x = 0; x < width; ++x )
@@ -18,23 +19,25 @@ public static class VecArrayExtensions
 		//		result.Add( new Vec( x, y ) );
 		//	}
 		//}
-		return result;
+		return _result;
 	}
 
-	public static Vec RandomPosition<T>( this VecArray<T> array, bool allow_borders )
+	public static Vec RandomPosition<T>( this VecArray<T> array, bool allowBorders )
 	{
-		if( allow_borders )
+		if ( allowBorders )
 		{
 			//return new Vec( new Rand().RangeInclusive( 0, array.Width - 1 ), new Rand().RangeInclusive( 0, array.Height - 1 ) );
-			int x = UnityEngine.Random.Range(0,array.Width-1);
-			int y = UnityEngine.Random.Range(0,array.Height-1);
+			int x = UnityEngine.Random.Range( 0, array.Width - 1 );
+			int y = UnityEngine.Random.Range( 0, array.Height - 1 );
+
 			return new Vec( x, y );
 		}
 		else
 		{
 			//return new Vec( new Rand().RangeInclusive( 1, array.Width - 2 ), new Rand().RangeInclusive( 1, array.Height - 2 ) );
-			int x = UnityEngine.Random.Range(1,array.Width-2);
-			int y = UnityEngine.Random.Range(1,array.Height-2);
+			int x = UnityEngine.Random.Range( 1, array.Width - 2 );
+			int y = UnityEngine.Random.Range( 1, array.Height - 2 );
+
 			return new Vec( x, y );
 		}
 	}
@@ -42,17 +45,20 @@ public static class VecArrayExtensions
 	public static List<Vec> PositionsWhere<T>( this VecArray<T> array, BooleanPositionDelegate condition )
 	{
 		List<Vec> result = new List<Vec>();
-		for( int x = 0; x < array.Width; ++x )
+
+		for ( int x = 0; x < array.Width; ++x )
 		{
-			for( int y = 0; y < array.Height; ++y )
+			for ( int y = 0; y < array.Height; ++y )
 			{
 				Vec p = new Vec( x, y );
-				if( condition( p ) )
+
+				if ( condition( p ) )
 				{
 					result.Add( p );
 				}
 			}
 		}
+
 		return result;
 	}
 
@@ -62,13 +68,14 @@ public static class VecArrayExtensions
 		int highest = 0;
 		bool first = true;
 
-		for( int x = 0; x < array.Width; ++x )
+		for ( int x = 0; x < array.Width; ++x )
 		{
-			for( int y = 0; y < array.Height; ++y )
+			for ( int y = 0; y < array.Height; ++y )
 			{
-				Vec position = new Vec(x,y);
-				int newValue = value(position);
-				if( first )
+				Vec position = new Vec( x, y );
+				int newValue = value( position );
+
+				if ( first )
 				{
 					first = false;
 					highest = newValue;
@@ -76,7 +83,7 @@ public static class VecArrayExtensions
 				}
 				else
 				{
-					if( newValue > highest )
+					if ( newValue > highest )
 					{
 						highest = newValue;
 						result.Clear();
@@ -84,7 +91,7 @@ public static class VecArrayExtensions
 					}
 					else
 					{
-						if( newValue == highest )
+						if ( newValue == highest )
 						{
 							result.Add( position );
 						}
@@ -92,6 +99,7 @@ public static class VecArrayExtensions
 				}
 			}
 		}
+
 		return result;
 	}
 
@@ -100,13 +108,15 @@ public static class VecArrayExtensions
 		List<Vec> result = new List<Vec>();
 		int lowest = 0;
 		bool first = true;
-		for( int x = 0; x < array.Width; ++x )
+
+		for ( int x = 0; x < array.Width; ++x )
 		{
-			for( int y = 0; y < array.Height; ++y )
+			for ( int y = 0; y < array.Height; ++y )
 			{
-				Vec position = new Vec(x,y);
-				int newValue = value(position);
-				if( first )
+				Vec position = new Vec( x, y );
+				int newValue = value( position );
+
+				if ( first )
 				{
 					first = false;
 					lowest = newValue;
@@ -114,7 +124,7 @@ public static class VecArrayExtensions
 				}
 				else
 				{
-					if( newValue < lowest )
+					if ( newValue < lowest )
 					{
 						lowest = newValue;
 						result.Clear();
@@ -122,7 +132,7 @@ public static class VecArrayExtensions
 					}
 					else
 					{
-						if( newValue == lowest )
+						if ( newValue == lowest )
 						{
 							result.Add( position );
 						}
@@ -130,161 +140,197 @@ public static class VecArrayExtensions
 				}
 			}
 		}
+
 		return result;
 	}
 
 	public static List<Vec> PositionsNearBorder<T>( this VecArray<T> array, int distance )
 	{
 		List<Vec> result = new List<Vec>();
-		if( distance <= 0 )
+
+		if ( distance <= 0 )
 		{
 			return result;
 		}
-		int Width = array.Get().GetLength(0);
-		int Height = array.Get().GetLength(1);
-		if( distance * 2 >= Width && distance * 2 >= Height )
+
+		int width = array.Get().GetLength( 0 );
+		int height = array.Get().GetLength( 1 );
+
+		if ( distance * 2 >= width && distance * 2 >= height )
 		{
 			return array.AllPositions();
 		}
-		for( int x = 0; x < Width; ++x )
+
+		for ( int x = 0; x < width; ++x )
 		{
-			for( int y = 0; y < Height; ++y )
+			for ( int y = 0; y < height; ++y )
 			{
-				if( y == distance && x >= distance && x < Width - distance )
+				if ( y == distance && x >= distance && x < width - distance )
 				{
-					y = Height - distance;
+					y = height - distance;
 				}
+
 				result.Add( new Vec( x, y ) );
 			}
 		}
+
 		return result;
 	}
 
-	public static List<Vec> GetFloodFillPositions<T>( this VecArray<T> array, Vec origin, bool exclude_origin, BooleanPositionDelegate condition )
-		=> array.GetFloodFillPositions( new List<Vec> { origin }, exclude_origin, condition );
+	public static List<Vec> GetFloodFillPositions<T>( this VecArray<T> array, Vec origin, bool excludeOrigin,
+		BooleanPositionDelegate condition )
+		=> array.GetFloodFillPositions( new List<Vec> { origin }, excludeOrigin, condition );
 
-	public static List<Vec> GetFloodFillPositions<T>( this VecArray<T> array, List<Vec> origins, bool exclude_origins, BooleanPositionDelegate condition )
+	public static List<Vec> GetFloodFillPositions<T>( this VecArray<T> array, List<Vec> origins, bool excludeOrigins,
+		BooleanPositionDelegate condition )
 	{
 		List<Vec> result = new List<Vec>( origins );
-		VecArray<bool> result_map = new VecArray<bool>( array.Width, array.Height );
+		VecArray<bool> resultMap = new VecArray<bool>( array.Width, array.Height );
 
-		foreach( Vec origin in origins )
+		foreach ( Vec origin in origins )
 		{
-			result_map[origin] = true;
+			resultMap[ origin ] = true;
 		}
 
 		Queue<Vec> frontier = new Queue<Vec>( origins );
 
-		while( frontier.Count > 0 )
+		while ( frontier.Count > 0 )
 		{
 			Vec position = frontier.Dequeue();
-			foreach( Vec neighbor in position.PositionsAtDistance( 1 ) )
+
+			foreach ( Vec neighbor in position.PositionsAtDistance( 1 ) )
 			{
-				if( array.BoundsCheck(neighbor) && !result_map[neighbor] && condition( neighbor ) )
+				if ( array.BoundsCheck( neighbor ) && !resultMap[ neighbor ] && condition( neighbor ) )
 				{
-					result_map[neighbor] = true;
+					resultMap[ neighbor ] = true;
 					frontier.Enqueue( neighbor );
 					result.Add( neighbor );
 				}
 			}
 		}
-		if( exclude_origins )
+
+		if ( excludeOrigins )
 		{
-			foreach( Vec origin in origins )
+			foreach ( Vec origin in origins )
 			{
 				result.Remove( origin );
 			}
 		}
+
 		return result;
 	}
 
-	public static VecArray<bool> GetFloodFillArray<T>( this VecArray<T> array, Vec origin, bool exclude_origin, BooleanPositionDelegate condition )
-		=> array.GetFloodFillArray( new List<Vec> { origin }, exclude_origin, condition );
-
-	public static VecArray<bool> GetFloodFillArray<T>( this VecArray<T> array, List<Vec> origins, bool exclude_origins, BooleanPositionDelegate condition )
+	public static VecArray<bool> GetFloodFillArray<T>( this VecArray<T> array, Vec origin,
+		BooleanPositionDelegate condition )
 	{
-		VecArray<bool> result_map = new VecArray<bool>( array.Width, array.Height );
-		foreach( Vec origin in origins )
+		return GetFloodFillArray( array, origin, false, condition );
+	}
+
+	public static VecArray<bool> GetFloodFillArray<T>( this VecArray<T> array, Vec origin, bool excludeOrigin,
+		BooleanPositionDelegate condition )
+		=> array.GetFloodFillArray( new List<Vec> { origin }, excludeOrigin, condition );
+
+	public static VecArray<bool> GetFloodFillArray<T>( this VecArray<T> array, List<Vec> origins, bool excludeOrigins,
+		BooleanPositionDelegate condition )
+	{
+		VecArray<bool> resultMap = new VecArray<bool>( array.Width, array.Height );
+
+		foreach ( Vec origin in origins )
 		{
-			result_map[origin] = true;
+			resultMap[ origin ] = true;
 		}
-		Queue<Vec> frontier = new Queue<Vec>(origins);
-		while( frontier.Count > 0 )
+
+		Queue<Vec> frontier = new Queue<Vec>( origins );
+
+		while ( frontier.Count > 0 )
 		{
 			Vec p = frontier.Dequeue();
-			foreach( Vec neighbor in p.PositionsAtDistance( 1 ) )
+
+			foreach ( Vec neighbor in p.PositionsAtDistance( 1 ) )
 			{
-				if( array.BoundsCheck(neighbor) && !result_map[neighbor] && condition( neighbor ) )
+				if ( array.BoundsCheck( neighbor ) && !resultMap[ neighbor ] && condition( neighbor ) )
 				{
-					result_map[neighbor] = true;
+					resultMap[ neighbor ] = true;
 					frontier.Enqueue( neighbor );
 				}
 			}
 		}
-		if( exclude_origins )
+
+		if ( excludeOrigins )
 		{
-			foreach( Vec origin in origins )
+			foreach ( Vec origin in origins )
 			{
-				result_map[origin] = false;
+				resultMap[ origin ] = false;
 			}
 		}
-		return result_map;
+
+		return resultMap;
 	}
 
 	public static List<Vec> GetRandomizedFloodFillPositions<T>(
-		this VecArray<T> array, Vec origin, int desired_count, bool exclude_origin_from_count, bool exclude_origin_from_result, BooleanPositionDelegate condition )
-		=> array.GetRandomizedFloodFillPositions( new List<Vec> { origin }, desired_count, exclude_origin_from_count, exclude_origin_from_result, condition );
+		this VecArray<T> array, Vec origin, int desiredCount, bool excludeOriginFromCount,
+		bool excludeOriginFromResult, BooleanPositionDelegate condition )
+		=> array.GetRandomizedFloodFillPositions( new List<Vec> { origin }, desiredCount, excludeOriginFromCount,
+			excludeOriginFromResult, condition );
 
 	public static List<Vec> GetRandomizedFloodFillPositions<T>(
-		this VecArray<T> array,		List<Vec> origins,		int desired_count,		bool exclude_origins_from_count,		bool exclude_origins_from_result,		BooleanPositionDelegate condition )
+		this VecArray<T> array, List<Vec> origins, int desiredCount, bool excludeOriginsFromCount,
+		bool excludeOriginsFromResult, BooleanPositionDelegate condition )
 	{
 		List<Vec> result = new List<Vec>();
-		VecArray<bool> result_map = new VecArray<bool>( array.Width, array.Height );
+		VecArray<bool> resultMap = new VecArray<bool>( array.Width, array.Height );
 		List<Vec> frontier = new List<Vec>();
 		int count = 0;
 
-		foreach( Vec origin in origins )
+		foreach ( Vec origin in origins )
 		{
-			result_map[origin] = true;
-			if( condition( origin ) )
+			resultMap[ origin ] = true;
+
+			if ( condition( origin ) )
 			{
-				if( !exclude_origins_from_count )
+				if ( !excludeOriginsFromCount )
 				{
 					++count;
 				}
-				if( !exclude_origins_from_result )
+
+				if ( !excludeOriginsFromResult )
 				{
 					result.Add( origin );
 				}
 			}
-			foreach( Vec neighbor in origin.PositionsAtDistance( 1 ) )
+
+			foreach ( Vec neighbor in origin.PositionsAtDistance( 1 ) )
 			{
-				if( array.BoundsCheck(neighbor) && !result_map[neighbor] )
+				if ( array.BoundsCheck( neighbor ) && !resultMap[ neighbor ] )
 				{
-					result_map[neighbor] = true;
+					resultMap[ neighbor ] = true;
 					frontier.Add( neighbor );
 				}
 			}
 		}
-		while( frontier.Count > 0 && count < desired_count )
+
+		while ( frontier.Count > 0 && count < desiredCount )
 		{
 			int randIndex = new Rand().Range( 0, frontier.Count );
-			Vec p = frontier[randIndex];
+			Vec p = frontier[ randIndex ];
 			frontier.RemoveAt( randIndex );
-			if( condition( p ) )
+
+			if ( condition( p ) )
 			{
 				result.Add( p );
 				++count;
-				foreach( Vec neighbor in p.PositionsAtDistance( 1 ) )
+
+				foreach ( Vec neighbor in p.PositionsAtDistance( 1 ) )
 				{
-					if(array.BoundsCheck(neighbor) && !result_map[neighbor] )
+					if ( array.BoundsCheck( neighbor ) && !resultMap[ neighbor ] )
 					{
-						result_map[neighbor] = true;
+						resultMap[ neighbor ] = true;
 						frontier.Add( neighbor );
 					}
 				}
 			}
 		}
+
 		return result;
 	}
 }

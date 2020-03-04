@@ -40,47 +40,47 @@ public static class Distances
 		}
 	}
 
-	public static int CalculateDistance(int from_x, int from_y, int target_x, int target_y )
+	public static int CalculateDistance(int fromX, int fromY, int targetX, int targetY )
 	{
 		switch( Globals.DefaultMetric )
 		{
 			case DistanceMetric.Manhattan:
-				return ManhattanDistance( from_x, from_y, target_x, target_y );
+				return ManhattanDistance( fromX, fromY, targetX, targetY );
 
 			case DistanceMetric.Euclidean:
-				return EuclideanDistance( from_x, from_y, target_x, target_y );
+				return EuclideanDistance( fromX, fromY, targetX, targetY );
 
-			case DistanceMetric.Chebyshev:
+			//case DistanceMetric.Chebyshev:
 			default:
-				return ChessboardDistance( from_x, from_y, target_x, target_y );
+				return ChessboardDistance( fromX, fromY, targetX, targetY );
 		}
 	}
 
 	public static int CalculateDistance( Vec from, Vec target ) => CalculateDistance( from.x, from.y, target.x, target.y );
 
-	public static int CalculateDistance( int from_x, int from_y, Vec target ) => CalculateDistance( from_x, from_y, target.x, target.y );
+	public static int CalculateDistance( int fromX, int fromY, Vec target ) => CalculateDistance( fromX, fromY, target.x, target.y );
 
-	public static int CalculateDistance( Vec from, int target_x, int target_y ) => CalculateDistance( from.x, from.y, target_x, target_y );
+	public static int CalculateDistance( Vec from, int targetX, int targetY ) => CalculateDistance( from.x, from.y, targetX, targetY );
 
 	/// <summary>
 	/// Chebyshev distance.
 	/// </summary>
-	public static int ChessboardDistance( int from_x, int from_y, int target_x, int target_y )
+	public static int ChessboardDistance( int fromX, int fromY, int targetX, int targetY )
 	{
-		int dx = Mathf.Abs(target_x - from_x);
-		int dy = Mathf.Abs(target_y - from_y);
+		int dx = Mathf.Abs(targetX - fromX);
+		int dy = Mathf.Abs(targetY - fromY);
 
 		return dx > dy ? dx : dy;
 	}
 
-	public static int ManhattanDistance( int from_x, int from_y, int target_x, int target_y )
+	public static int ManhattanDistance( int fromX, int fromY, int targetX, int targetY )
 	{
-		return Math.Abs( from_x - target_x ) + Math.Abs( from_y - target_y );
+		return Math.Abs( fromX - targetX ) + Math.Abs( fromY - targetY );
 	}
 
-	public static int EuclideanDistance( int from_x, int from_y, int target_x, int target_y )
+	public static int EuclideanDistance( int fromX, int fromY, int targetX, int targetY )
 	{
-		int square = (from_x - from_y) * (from_x - from_y) + (target_x - target_y) * (target_x - target_y);
+		int square = (fromX - fromY) * (fromX - fromY) + (targetX - targetY) * (targetX - targetY);
 		return square;
 	}
 }

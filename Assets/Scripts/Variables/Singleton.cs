@@ -1,5 +1,7 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
+
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 /// <summary>
@@ -9,6 +11,7 @@ using UnityEngine;
 ///
 /// As a note, this is made as MonoBehaviour because we need Coroutines.
 /// </summary>
+[SuppressMessage( "ReSharper", "StaticMemberInGenericType" )]
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
 	private static T _instance;
@@ -19,44 +22,43 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	{
 		get
 		{
-			if( applicationIsQuitting )
+			if ( _applicationIsQuitting )
 			{
-				Debugger.LogWarning( "[Singleton] Instance '" + typeof( T ) +
-					"' already destroyed on application quit." +
-					" Won't create again - returning null." );
+				Debugger.LogWarning( "[Singleton] Instance '" + typeof(T) +
+				                     "' already destroyed on application quit." +
+				                     " Won't create again - returning null." );
+
 				return null;
 			}
 
-			lock( _lock )
+			lock ( _lock )
 			{
-				if( _instance != null ) return _instance;
+				if ( _instance != null ) return _instance;
 
-				_instance = (T)FindObjectOfType( typeof( T ) );
+				_instance = (T) FindObjectOfType( typeof(T) );
 
-				if( FindObjectsOfType( typeof( T ) ).Length > 1 )
+				if ( FindObjectsOfType( typeof(T) ).Length > 1 )
 				{
 					Debugger.LogError( "[Singleton] Something went really wrong " +
-								   " - there should never be more than 1 singleton!" +
-								   " Reopening the scene might fix it." );
+					                   " - there should never be more than 1 singleton!" +
+					                   " Reopening the scene might fix it." );
+
 					return _instance;
 				}
 
-				if( _instance == null )
+				if ( _instance == null )
 				{
 					GameObject singleton = new GameObject();
 					_instance = singleton.AddComponent<T>();
-					singleton.name = "(singleton) " + typeof( T ).ToString();
+					singleton.name = $"(singleton) {typeof(T)}";
 
 					DontDestroyOnLoad( singleton );
 
-					Debugger.Log( "[Singleton] An instance of " + typeof( T ) +
-							  " is needed in the scene, so '" + singleton +
-							  "' was created with DontDestroyOnLoad." );
+					Debugger.Log( $"[Singleton] An instance of {typeof(T)} is needed in the scene, so '{singleton}' was created with DontDestroyOnLoad." );
 				}
 				else
 				{
-					Debugger.Log( "[Singleton] Using instance already created: " +
-							  _instance.gameObject.name );
+					Debugger.Log( $"[Singleton] Using instance already created: {_instance.gameObject.name}" );
 				}
 
 				return _instance;
@@ -64,7 +66,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 		}
 	}
 
-	private static bool applicationIsQuitting = false;
+	private static bool _applicationIsQuitting;
 
 	/// <summary>
 	/// When Unity quits, it destroys objects in a random order.
@@ -76,6 +78,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 	/// </summary>
 	public void OnDestroy()
 	{
-		applicationIsQuitting = true;
+		_applicationIsQuitting = true;
 	}
 }

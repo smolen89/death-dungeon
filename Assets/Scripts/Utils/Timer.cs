@@ -3,6 +3,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using UnityEngine;
 
 namespace Tools
@@ -20,22 +21,24 @@ namespace Tools
 
 		public void Stop() => result = Time.realtimeSinceStartup - start;
 
-		public override string ToString() => $"{result * 1000} ms";
+		public override string ToString() => $"{(result * 1000).ToString( CultureInfo.InvariantCulture )} ms";
 
 		public static long StopWatch( string name, Action action )
 		{
-			if( action == null )
+			if ( action == null )
 			{
 				Debugger.LogError( "Timer", $"{name}: Action is null." );
+
 				return -1;
 			}
 
-			Stopwatch timer = new Stopwatch();
+			var timer = new Stopwatch();
 			timer.Start();
 			action.Invoke();
 			timer.Stop();
 
-			Debugger.LogInfo( "Timer", $"{name}: {timer.ElapsedMilliseconds} ms." );
+			Debugger.LogInfo( "Timer", $"{name}: {timer.ElapsedMilliseconds.ToString()} ms." );
+
 			return timer.ElapsedMilliseconds;
 		}
 	}

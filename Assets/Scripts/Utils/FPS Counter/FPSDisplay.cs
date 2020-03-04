@@ -1,11 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-// wyłączenie informacji że zmienne nie są nigdzie przypisane i mają wartość domyślną.
-// w rzeczywistości przypisane są wartości w inspektorze (w prefabie).
 #pragma warning disable 0649
 
-[RequireComponent( typeof( FPSCounter ) )]
+[RequireComponent( typeof(FPSCounter) )]
 public class FPSDisplay : MonoBehaviour
 {
 	public Text highestFPSLabel;
@@ -14,8 +12,7 @@ public class FPSDisplay : MonoBehaviour
 
 	private FPSCounter fpsCounter;
 
-	[SerializeField]
-	private FPSColor[] coloring;
+	[SerializeField] private FPSColor[] coloring;
 
 	private void Awake()
 	{
@@ -31,18 +28,21 @@ public class FPSDisplay : MonoBehaviour
 
 	private void Display( Text label, int fps )
 	{
-		label.text = stringNumbers[Mathf.Clamp( fps, 0, 299 )];
-		for( int i = 0; i < coloring.Length; i++ )
+		label.text = stringNumbers[ Mathf.Clamp( fps, 0, 299 ) ];
+
+		for ( int i = 0; i < coloring.Length; i++ )
 		{
-			if( fps >= coloring[i].minimumFPS )
+			if ( fps >= coloring[ i ].minimumFPS )
 			{
-				label.color = coloring[i].color;
+				label.color = coloring[ i ].color;
+
 				break;
 			}
 		}
 	}
 
-	private static string[] stringNumbers = {
+	private static readonly string[] stringNumbers =
+	{
 		"000", "001", "002", "003", "004", "005", "006", "007", "008", "009",
 		"010", "011", "012", "013", "014", "015", "016", "017", "018", "019",
 		"020", "021", "022", "023", "024", "025", "026", "027", "028", "029",

@@ -6,7 +6,7 @@ public struct RangeInt
 	public int minValue;
 	public int maxValue;
 
-	public RangeInt(int min, int max )
+	public RangeInt( int min, int max )
 	{
 		this.minValue = min;
 		this.maxValue = max;

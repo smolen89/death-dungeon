@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Threading;
 
 namespace RD
@@ -8,24 +6,24 @@ namespace RD
 	internal sealed class Indexer
 	{
 		private readonly ConcurrentStack<int> freeIDs;
-		private int lastID;
-		public int LastID => lastID;
+		private int lastId;
+		public int LastId => lastId;
 
-		public Indexer( int startID = 0 )
+		public Indexer( int startId = 0 )
 		{
 			freeIDs = new ConcurrentStack<int>();
-			lastID = startID;
+			lastId = startId;
 		}
 
-		public int GetFreeID()
+		public int GetFreeId()
 		{
-			if( !freeIDs.TryPop( out int newID ) )
+			if( !freeIDs.TryPop( out int newId ) )
 			{
-				newID = Interlocked.Increment( ref lastID );
+				newId = Interlocked.Increment( ref lastId );
 			}
-			return newID;
+			return newId;
 		}
 
-		public void ReleaseID( int releasedID ) => freeIDs.Push( releasedID );
+		public void ReleaseId( int releasedId ) => freeIDs.Push( releasedId );
 	}
 }

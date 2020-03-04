@@ -8,8 +8,8 @@ public struct RangeFloat
 
 	public RangeFloat( float min, float max )
 	{
-		this.minValue = min;
-		this.maxValue = max;
+		minValue = min;
+		maxValue = max;
 	}
 
 	public float GetRandom() => Random.Range( minValue, maxValue );

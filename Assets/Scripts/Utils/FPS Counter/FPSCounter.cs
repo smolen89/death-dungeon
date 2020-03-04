@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FPSCounter : MonoBehaviour
 {
@@ -14,10 +12,11 @@ public class FPSCounter : MonoBehaviour
 
 	private void InitializeBuffer()
 	{
-		if( frameRange <= 0 )
+		if ( frameRange <= 0 )
 		{
 			frameRange = 1;
 		}
+
 		fpsBuffer = new int[frameRange];
 		fpsBufferIndex = 0;
 	}
@@ -25,18 +24,20 @@ public class FPSCounter : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		if( fpsBuffer == null || fpsBuffer.Length != frameRange )
+		if ( fpsBuffer == null || fpsBuffer.Length != frameRange )
 		{
 			InitializeBuffer();
 		}
+
 		UpdateBuffer();
 		CalculateFPS();
 	}
 
 	private void UpdateBuffer()
 	{
-		fpsBuffer[fpsBufferIndex++] = (int)( 1f / Time.unscaledDeltaTime );
-		if( fpsBufferIndex >= frameRange )
+		fpsBuffer[ fpsBufferIndex++ ] = (int) ( 1f / Time.unscaledDeltaTime );
+
+		if ( fpsBufferIndex >= frameRange )
 		{
 			fpsBufferIndex = 0;
 		}
@@ -47,19 +48,23 @@ public class FPSCounter : MonoBehaviour
 		int sum = 0;
 		int highest = 0;
 		int lowest = int.MaxValue;
-		for( int i = 0; i < frameRange; i++ )
+
+		for ( int i = 0; i < frameRange; i++ )
 		{
-			int fps = fpsBuffer[i];
+			int fps = fpsBuffer[ i ];
 			sum += fps;
-			if( fps > highest )
+
+			if ( fps > highest )
 			{
 				highest = fps;
 			}
-			if( fps < lowest )
+
+			if ( fps < lowest )
 			{
 				lowest = fps;
 			}
 		}
+
 		AverageFPS = sum / frameRange;
 		HighestFPS = highest;
 		LowestFPS = lowest;

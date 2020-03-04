@@ -1,8 +1,10 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
-using UnityEngine;
-using System.Collections.Generic;
+
 using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Proto
 {
@@ -35,17 +37,17 @@ namespace Proto
 		/// <summary>
 		/// Pary przeciwstawne z 4 kierunków.
 		/// </summary>
-		public static int[][] FourDirectionPairs = { new int[]{ 8, 2 }, new int[]{ 6, 4 } };
+		public static int[][] FourDirectionPairs = { new[] { 8, 2 }, new[] { 6, 4 } };
 
 		/// <summary>
 		/// pary przeciwstawne z 8 kierunków.
 		/// </summary>
 		public static int[][] EightDirectionPairs =
 		{
-			new int[]{ 8, 2 },
-			new int[]{ 9, 1 },
-			new int[]{ 6, 4 },
-			new int[]{ 3, 7 }
+			new[] { 8, 2 },
+			new[] { 9, 1 },
+			new[] { 6, 4 },
+			new[] { 3, 7 }
 		};
 
 		/// <summary>
@@ -57,106 +59,123 @@ namespace Proto
 		/// <returns>Nowy kierunek.</returns>
 		public static int RotateDirection( this int direction, bool clockwise, int times = 1 )
 		{
-			if( Globals.DefaultMetric == DistanceMetric.Chebyshev )
+			if ( Globals.DefaultMetric == DistanceMetric.Chebyshev )
 			{
 				return direction.RotateEightWayDir( clockwise, times );
 			}
+
 			return direction.RotateFourWayDir( clockwise, times );
 		}
 
 		public static int RotateEightWayDir( this int direction, bool clockwise, int times = 1 )
 		{
 			// jeśli jest 5 to nie ma potrzeby zmieniać czegokolwiek.
-			if( direction == 5 )
+			if ( direction == 5 )
 			{
 				return 5;
 			}
 
 			// jeśli ilość obróceń jest na minusie to kierunek będzie odwrotny
-			if( times < 0 )
+			if ( times < 0 )
 			{
 				times = -times;
 				clockwise = !clockwise;
 			}
 
-			for( int i = 0; i < times; ++i )
+			for ( int i = 0; i < times; ++i )
 			{
-				switch( direction )
+				switch ( direction )
 				{
 					case 7:
 						direction = clockwise ? 8 : 4;
+
 						break;
 
 					case 8:
 						direction = clockwise ? 9 : 7;
+
 						break;
 
 					case 9:
 						direction = clockwise ? 6 : 8;
+
 						break;
 
 					case 4:
 						direction = clockwise ? 7 : 1;
+
 						break;
 
 					case 6:
 						direction = clockwise ? 3 : 9;
+
 						break;
 
 					case 1:
 						direction = clockwise ? 4 : 2;
+
 						break;
 
 					case 2:
 						direction = clockwise ? 1 : 3;
+
 						break;
 
 					case 3:
 						direction = clockwise ? 2 : 6;
+
 						break;
 
 					default:
 						return 0;
 				}
 			}
+
 			return direction;
 		}
 
 		public static int RotateFourWayDir( this int direction, bool clockwise, int times = 1 )
 		{
-			if( direction == 5 )
+			if ( direction == 5 )
 			{
 				return 5;
 			}
-			if( times < 0 )
+
+			if ( times < 0 )
 			{
 				times = -times;
 				clockwise = !clockwise;
 			}
-			for( int i = 0; i < times; ++i )
+
+			for ( int i = 0; i < times; ++i )
 			{
-				switch( direction )
+				switch ( direction )
 				{
 					case 8:
 						direction = clockwise ? 6 : 4;
+
 						break;
 
 					case 4:
 						direction = clockwise ? 8 : 2;
+
 						break;
 
 					case 6:
 						direction = clockwise ? 2 : 8;
+
 						break;
 
 					case 2:
 						direction = clockwise ? 4 : 6;
+
 						break;
 
 					default:
 						throw new ArgumentException( "Rotate4WayDir accepts only 4-way directions: 2(down), 4(left), 5(neutral), 6(right), and 8(up)." );
 				}
 			}
+
 			return direction;
 		}
 
@@ -167,20 +186,20 @@ namespace Proto
 		public static List<int> GetArc( this int i, int distance, bool clockwise = true )
 		{
 			List<int> result = new List<int>();
-			for( int num = -distance; num <= distance; ++num )
+
+			for ( int num = -distance; num <= distance; ++num )
 			{
 				result.Add( i.RotateDirection( clockwise, num ) );
 			}
+
 			return result;
 		}
 
 		public static int DirectionOf( this Vec position, Vec target )
 		{
-			if( Globals.DefaultMetric == DistanceMetric.Chebyshev )
-			{
-				return position.EightWayDirectionOf( target );
-			}
-			return position.FourWayDirectionOf( target );
+			return Globals.DefaultMetric == DistanceMetric.Chebyshev 
+				? position.EightWayDirectionOf( target ) 
+				: position.FourWayDirectionOf( target );
 		}
 
 		/// <summary>
@@ -250,65 +269,57 @@ namespace Proto
 
 			int x = position.x;
 			int y = position.y;
-			int dx = Mathf.Abs(target.x - x);
-			int dy = Mathf.Abs(target.y - y);
+			int dx = Mathf.Abs( target.x - x );
+			int dy = Mathf.Abs( target.y - y );
 
 			// y = target.y -- poziomo (lewo prawo)
-			if( dy == 0 )
+			if ( dy == 0 )
 			{
 				// jestem po lewej czyli target po prawej
-				if( x < target.x )
+				if ( x < target.x )
 					return 6;
 
 				// jestem po prawej czyli target po lewej
-				if( x > target.x )
+				if ( x > target.x )
 					return 4;
-				else
-				{
-					// x = y mamy takie same
-					if( dx == 0 )
-						return 5;
-				}
+
+				// x = y mamy takie same
+				if ( dx == 0 )
+					return 5;
 			}
 
 			// x = target.x -- pionowo (góra dół)
-			if( dx == 0 )
+			if ( dx == 0 )
 			{
 				// jestem u góry czyli target na dole
-				if( y > target.y )
+				if ( y > target.y )
 					return 2;
-				else
-				{
-					// jestem niżej czyli target u góry
-					if( y < target.y )
-						return 8;
-				}
+
+				// jestem niżej czyli target u góry
+				if ( y < target.y )
+					return 8;
 			}
 
 			// Ukośnie z lewej góry => prawy dół
-			if( x + y == target.x + target.y )
+			if ( x + y == target.x + target.y )
 			{
 				//slope is -1
-				if( x > target.x )
+				if ( x > target.x )
 					return 7;
-				else
-				{
-					if( x < target.x )
-						return 3;
-				}
+
+				if ( x < target.x )
+					return 3;
 			}
 
 			// Ukośnie z prawej góry => lewy dół
-			if( x - y == target.x - target.y )
+			if ( x - y == target.x - target.y )
 			{
 				//slope is 1
-				if( x > target.x )
+				if ( x > target.x )
 					return 1;
-				else
-				{
-					if( x < target.x )
-						return 9;
-				}
+
+				if ( x < target.x )
+					return 9;
 			}
 
 			// calculate all other dirs here
@@ -316,20 +327,20 @@ namespace Proto
 			int orthogonalDirection; //orthogonal
 			int diagonalDirection; //diagonal
 
-			int dprimary = Mathf.Min( dy, dx );     // Smaller
-			int dsecondary = Mathf.Max( dy, dx );   // Bigger
+			int dprimary = Mathf.Min( dy, dx ); // Smaller
+			int dsecondary = Mathf.Max( dy, dx ); // Bigger
 
 			// Prawa strona
-			if( x < target.x )
+			if ( x < target.x )
 			{
 				// x < target.x
 
-				if( y > target.y )
+				if ( y > target.y )
 				{
 					// x < target.x	y > target.y
 					diagonalDirection = 3;
 
-					if( dx > dy )
+					if ( dx > dy )
 					{
 						//  x < target.x	y > target.y	dx > dy
 						orthogonalDirection = 6;
@@ -345,7 +356,7 @@ namespace Proto
 					// x < target.x	y < target.y
 					diagonalDirection = 1;
 
-					if( dx > dy )
+					if ( dx > dy )
 					{
 						// x < target.x	y < target.y	dx > dy
 						orthogonalDirection = 6;
@@ -360,12 +371,12 @@ namespace Proto
 			else
 			{
 				// x > target.x
-				if( y > target.y )
+				if ( y > target.y )
 				{
 					// x > target.x		y > target.y
 					diagonalDirection = 1;
 
-					if( dx > dy )
+					if ( dx > dy )
 					{
 						// x > target.x		y > target.y	dx > dy
 						orthogonalDirection = 4;
@@ -381,7 +392,7 @@ namespace Proto
 					// x > target.x		y < target.y
 					diagonalDirection = 7;
 
-					if( dx > dy )
+					if ( dx > dy )
 					{
 						// x > target.x		y < target.y	dx > dy
 						orthogonalDirection = 4;
@@ -395,17 +406,15 @@ namespace Proto
 			}
 
 			int tiebreaker = orthogonalDirection;
-			float ratio = (float)dprimary / (float)dsecondary;
+			float ratio = dprimary / (float) dsecondary;
 
-			if( ratio < 0.5f )
+			if ( ratio < 0.5f )
 				return orthogonalDirection;
-			else
-			{
-				if( ratio > 0.5f )
-					return diagonalDirection;
-				else
-					return tiebreaker;
-			}
+
+			if ( ratio > 0.5f )
+				return diagonalDirection;
+
+			return tiebreaker;
 		}
 
 		public static int FourWayDirectionOf( this Vec position, Vec target )
@@ -413,27 +422,29 @@ namespace Proto
 			//determines which of the 4 directions is closest to the actual direction. Ties go to the vertical directions.
 			int x = position.x;
 			int y = position.y;
-			int dx = Mathf.Abs(target.x - x);
-			int dy = Mathf.Abs(target.y - y);
+			int dx = Mathf.Abs( target.x - x );
+			int dy = Mathf.Abs( target.y - y );
 
 			// Ta sama lokalizacja
-			if( dx == 0 && dy == 0 )
+			if ( dx == 0 && dy == 0 )
 				return 5;
 
 			// mamy napewno po prawej bądź lewej
-			if( dx > dy )
+			if ( dx > dy )
 			{
-				if( target.x > x )
+				if ( target.x > x )
 					return 6;
 
 				return 4;
 			}
+
 			// mamy napewno u góry bądź na dole
-			if( target.y > y )
+			if ( target.y > y )
 			{
 				//dx <= dy
 				return 8;
 			}
+
 			return 2;
 		}
 
@@ -442,11 +453,13 @@ namespace Proto
 		/// </summary>
 		public static int RandomDirection()
 		{
-			int result = UnityEngine.Random.Range(0,9);
-			if( result == 5 )
+			int result = Random.Range( 0, 9 );
+
+			if ( result == 5 )
 			{
 				result = 9;
 			}
+
 			return result;
 		}
 	}

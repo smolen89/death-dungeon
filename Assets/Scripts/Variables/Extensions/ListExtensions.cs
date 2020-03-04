@@ -1,21 +1,25 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
-using UnityEngine;
+
 using System.Collections.Generic;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public static class ListExtensions
 {
 	public static T GetRandom<T>( this IList<T> source )
 	{
 		int index = Random.Range( 0, source.Count );
-		return source[index];
+
+		return source[ index ];
 	}
 
-	// Prawdopodobnie IList załatwił sprawę, choć Linq się może przydać
 	public static T GetRandom<T>( this IEnumerable<T> source )
 	{
-		int index = Random.Range(0,source.Count());
+		// ReSharper disable once PossibleMultipleEnumeration
+		var index = Random.Range( 0, source.Count() );
+
+		// ReSharper disable once PossibleMultipleEnumeration
 		return source.ToArray()[ index ];
 	}
 }

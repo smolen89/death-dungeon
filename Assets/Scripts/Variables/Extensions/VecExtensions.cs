@@ -13,9 +13,10 @@ public static class VecExtensions
 
 
 	/// <summary>
-	/// Gets whether the distance between the two given <see cref="Vec">Vecs</see> is within
+	/// Gets whether the distance between the two given <see cref="Vec">Vec</see> is within
 	/// the given distance.
 	/// </summary>
+	/// <param name = "a">This Vec.</param>
 	/// <param name="b">Other Vec.</param>
 	/// <param name="distance">Maximum distance between.</param>
 	/// <returns><c>true</c> if the distance between <c>a</c> and <c>b</c> is less than or equal to <c>distance</c>.</returns>
@@ -102,7 +103,8 @@ public static class VecExtensions
 		return result;
 	}
 
-	public static List<Vec> PositionsWithinChebyshevDistance( this Vec source, int distance, bool excludeOrigin = false ) => source.PositionsWithinChebyshevDistance<int>( distance, null, excludeOrigin );
+	public static List<Vec> PositionsWithinChebyshevDistance( this Vec source, int distance, bool excludeOrigin = false ) 
+		=> source.PositionsWithinChebyshevDistance<int>( distance, null, excludeOrigin );
 
 	public static List<Vec> PositionsAtChebyshevDistance<T>( this Vec source, int distance, VecArray<T> array )
 	{
@@ -127,7 +129,8 @@ public static class VecExtensions
 		return result;
 	}
 
-	public static List<Vec> PositionsAtChebyshevDistance( this Vec source, int distance ) => source.PositionsAtChebyshevDistance<int>( distance, null );
+	public static List<Vec> PositionsAtChebyshevDistance( this Vec source, int distance ) 
+		=> source.PositionsAtChebyshevDistance<int>( distance, null );
 
 	#endregion Chebyshev
 
@@ -155,7 +158,8 @@ public static class VecExtensions
 		return result;
 	}
 
-	public static List<Vec> PositionsWithinManhattanDistance( this Vec source, int distance, bool excludeOrigin = false ) => source.PositionsWithinManhattanDistance<int>( distance, null, excludeOrigin );
+	public static List<Vec> PositionsWithinManhattanDistance( this Vec source, int distance, bool excludeOrigin = false ) 
+		=> source.PositionsWithinManhattanDistance<int>( distance, null, excludeOrigin );
 
 	public static List<Vec> PositionsAtManhattanDistance<T>( this Vec source, int distance, VecArray<T> array )
 	{
@@ -204,7 +208,8 @@ public static class VecExtensions
 		return result;
 	}
 
-	public static List<Vec> PositionsWithinEuclideanDistance<T>( this Vec source, int distance, bool excludeOrigin = false ) => source.PositionsWithinEuclideanDistance<int>( distance, null, excludeOrigin );
+	public static List<Vec> PositionsWithinEuclideanDistance<T>( this Vec source, int distance, bool excludeOrigin = false ) 
+		=> source.PositionsWithinEuclideanDistance<T>( distance, null, excludeOrigin );
 
 	public static List<Vec> PositionsAtEuclideanDistance<T>( this Vec source, int distance, VecArray<T> array )
 	{
