@@ -1,10 +1,12 @@
 
-![GitHub top language](https://img.shields.io/github/languages/top/smolen89/death-dungeon.svg?style=plastic)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/smolen89/death-dungeon.svg?color=darkcyan&style=plastic)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/smolen89/death-dungeon.svg?style=plastic)
-![GitHub issues](https://img.shields.io/github/issues/smolen89/death-dungeon.svg?style=plastic)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/w/smolen89/death-dungeon.svg?style=plastic)
-![GitHub](https://img.shields.io/github/license/smolen89/death-dungeon.svg?style=plastic)
+![GITVersion](https://img.shields.io/badge/Version-0.0.1_preAlpha-blueviolet?style=flat-square)
+![GitHub top language](https://img.shields.io/github/languages/top/smolen89/death-dungeon.svg?style=flat-square)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/smolen89/death-dungeon.svg?color=darkcyan&style=flat-square)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/smolen89/death-dungeon.svg?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/smolen89/death-dungeon.svg?style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/smolen89/death-dungeon.svg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/smolen89/death-dungeon.svg?style=flat-square)
+
 # Death Dungeon
 
  (_Robocza nazwa - trzeba zmienić_)
