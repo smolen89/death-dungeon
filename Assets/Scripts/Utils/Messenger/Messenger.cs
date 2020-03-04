@@ -21,6 +21,7 @@ internal static class Messenger
 	#pragma warning disable 0414
 
 	//Ensures that the MessengerHelper will be created automatically upon start of the game.
+	// ReSharper disable once UnusedMember.Local
 	private static MessengerComponent _messengerHelper =
 		( new GameObject( MessengerHelperGameObjectName ) ).AddComponent<MessengerComponent>();
 
