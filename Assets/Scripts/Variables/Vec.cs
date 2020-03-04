@@ -84,11 +84,11 @@ public struct Vec : IEquatable<Vec>, IEquatable<(int x, int y)>, IComparable<Vec
 	public static implicit operator Vec( Vector2Int vec ) => new Vec( vec.x, vec.y );
 
 	// Vector3
-	public static implicit operator Vector3( Vec value ) => new Vector3( value.x, 0, value.y );
+	public static implicit operator Vector3( Vec value ) => new Vector3( value.x, value.y, 0 );
 	public static implicit operator Vec( Vector3 vec ) => new Vec( vec.x, vec.y );
 
 	// Vector3Int
-	public static implicit operator Vector3Int( Vec value ) => new Vector3Int( value.x, 0, value.y );
+	public static implicit operator Vector3Int( Vec value ) => new Vector3Int( value.x, value.y,0 );
 	public static implicit operator Vec( Vector3Int vec ) => new Vec( vec.x, vec.y );
 
 	// tuple

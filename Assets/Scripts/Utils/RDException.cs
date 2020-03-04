@@ -3,7 +3,7 @@
 namespace RD
 {
 	/// <summary>
-	/// Podstawowy Exception.
+	/// Simple Exception.
 	/// </summary>
 	public class RDException : Exception
 	{

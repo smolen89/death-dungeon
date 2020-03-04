@@ -2,13 +2,12 @@
 // Create by Ebbi Gebbi.
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public static class VecExtensions
 {
 	#region Distance
 
-	public static int CalculateDistance( this Vec source, int destination_x, int destination_y ) => Distances.CalculateDistance( source, destination_x, destination_y );
+	public static int CalculateDistance( this Vec source, int destinationX, int destinationY ) => Distances.CalculateDistance( source, destinationX, destinationY );
 
 	public static int CalculateDistance( this Vec source, Vec destination ) => Distances.CalculateDistance( source, destination );
 
@@ -55,13 +54,13 @@ public static class VecExtensions
 			case DistanceMetric.Euclidean:
 				return source.PositionsWithinEuclideanDistance( distance, array, excludeOrigin );
 
-			case DistanceMetric.Chebyshev:
+			//case DistanceMetric.Chebyshev:
 			default:
 				return source.PositionsWithinChebyshevDistance( distance, array, excludeOrigin );
 		}
 	}
 
-	public static List<Vec> PositionsWithinDistance( this Vec source, int distance, bool exludeOrigin = false ) => source.PositionsWithinDistance<int>( distance, null, exludeOrigin );
+	public static List<Vec> PositionsWithinDistance( this Vec source, int distance, bool excludeOrigin = false ) => source.PositionsWithinDistance<int>( distance, null, excludeOrigin );
 
 	public static List<Vec> PositionsAtDistance<T>( this Vec source, int distance, VecArray<T> array )
 	{
@@ -73,8 +72,7 @@ public static class VecExtensions
 			case DistanceMetric.Euclidean:
 				return source.PositionsAtEuclideanDistance( distance, array );
 
-			case DistanceMetric.Chebyshev:
-
+			//case DistanceMetric.Chebyshev:
 			default:
 				return source.PositionsAtChebyshevDistance( distance, array );
 		}
@@ -277,7 +275,7 @@ public static class VecExtensions
 		{
 			for( int i = 0; i < 8; i++ )
 			{
-				if (condition(source + Direction.Up.Rotate8Way( i, true ) ) )
+				if (condition(source + Direction.Up.Rotate8Way( i ) ) )
 				{
 					count++;
 				}
