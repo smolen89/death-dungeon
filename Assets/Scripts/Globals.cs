@@ -1,13 +1,15 @@
 ﻿// Copyright (c) 2019 EG Studio, LLC. All Rights Reserved.
 // Create by Ebbi Gebbi.
 
-public class Globals
+public static class Globals
 {
 	/// <summary>
 	/// Distance global calculations.
 	/// </summary>
 	public static DistanceMetric DefaultMetric = DistanceMetric.Euclidean;
 
+	public static readonly RD.Util.RND.DotNetRandom DefaultRandom = new RD.Util.RND.DotNetRandom();
+	
 	/// <summary>
 	/// Client Version.
 	/// </summary>
