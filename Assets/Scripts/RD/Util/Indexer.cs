@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
 
-namespace RD
+namespace RD.Util
 {
 	internal sealed class Indexer
 	{

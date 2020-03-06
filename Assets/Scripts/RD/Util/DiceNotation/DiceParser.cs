@@ -63,7 +63,7 @@ namespace RD.Util.DiceNotation
 				{
 					string chooseAccum = string.Empty;
 
-					while ( i+1<cleanExpression.Length && char.IsDigit( cleanExpression[i+1] ) )
+					while ( i + 1 < cleanExpression.Length && char.IsDigit( cleanExpression[ i + 1 ] ) )
 					{
 						chooseAccum += cleanExpression[ i + 1 ].ToString();
 						i++;
@@ -84,7 +84,7 @@ namespace RD.Util.DiceNotation
 				}
 				else
 				{
-					throw new ArgumentException("Invalid character in dice expression",nameof(expression));
+					throw new ArgumentException( "Invalid character in dice expression", nameof(expression) );
 				}
 			}
 
@@ -106,6 +106,7 @@ namespace RD.Util.DiceNotation
 				dice.Dice( parseValues.Multiplicity, constant, parseValues.Scalar, parseValues.Choose );
 			}
 		}
+
 		private struct ParseValues
 		{
 			public string Constant;
