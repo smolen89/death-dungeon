@@ -1,4 +1,4 @@
-﻿using ICSharpCode.NRefactory.Ast;
+﻿using RD.GameEngine.ECS.Managers;
 
 namespace RD.GameEngine.ECS.Components
 {

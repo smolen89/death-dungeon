@@ -66,7 +66,7 @@ namespace RD.Util
 			Count = 0;
 		}
 
-		public bool Coontains( T element )
+		public bool Contains( T element )
 		{
 			for (int index = this.Count - 1; index >= 0; --index)
 			{

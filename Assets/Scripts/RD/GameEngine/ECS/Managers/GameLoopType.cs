@@ -1,4 +1,4 @@
-﻿namespace RD.GameEngine.ECS.Manager
+﻿namespace RD.GameEngine.ECS.Managers
 {
 	/// <summary>
 	/// The Type of System Update.

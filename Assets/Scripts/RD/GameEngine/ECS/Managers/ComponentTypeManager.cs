@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Reflection;
+using RD.GameEngine.ECS.Components;
 using UnityEngine;
 
-namespace RD.GameEngine.ECS.Components
+namespace RD.GameEngine.ECS.Managers
 {
 	public static class ComponentTypeManager
 	{
 		private static readonly Dictionary<Type, ComponentType> ComponentTypes = new Dictionary<Type, ComponentType>();
 
-		public static int GetBit<T>() where T : IComponent => GetTypeFor<T>().Bit;
+		public static BigInteger GetBit<T>() where T : IComponent => GetTypeFor<T>().Bit;
 		public static int GetId<T>() where T : IComponent => GetTypeFor<T>().Id;
 		
 		public static ComponentType GetTypeFor<T>() where T : IComponent => GetTypeFor( typeof(T) );
@@ -30,7 +32,7 @@ namespace RD.GameEngine.ECS.Components
 			return result;
 		}
 
-		internal static IEnumerable<Type> GetTypesFromBits( int bits )
+		internal static IEnumerable<Type> GetTypesFromBits( BigInteger bits )
 		{
 			foreach ( KeyValuePair<Type,ComponentType> keyValuePair in ComponentTypes )
 			{

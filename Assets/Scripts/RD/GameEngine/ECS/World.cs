@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Reflection;
 using RD.Exceptions;
 using RD.GameEngine.ECS.Components;
 using RD.GameEngine.ECS.Entities;
+using RD.GameEngine.ECS.Managers;
 using RD.Util;
 using UnityEngine;
 
 namespace RD.GameEngine.ECS
 {
+	/// <summary>
+	/// The Entity World class. <br />
+	/// Main interface of the Entity Systems.
+	/// </summary>
 	public sealed class World
 	{
 		private readonly ListEx<IEntity> deleted;
@@ -18,14 +22,22 @@ namespace RD.GameEngine.ECS
 		private readonly Dictionary<Type, IComponentPool<ComponentPoolable>> pools;
 		private readonly HashSet<IEntity> refreshed;
 		private int poolCleanupDelayCounter;
-		private bool isInitialized = false;
+		private bool isInitialized;
 
 		public World( bool isSortedEntities = false, bool processAttributes = true, bool initializeAll = false )
 		{
+			IsSortedEntities = isSortedEntities;
 			refreshed = new HashSet<IEntity>();
 			pools = new Dictionary<Type, IComponentPool<ComponentPoolable>>();
 			entityTemplates = new Dictionary<string, IEntityTemplate>();
 			deleted = new ListEx<IEntity>();
+			EntityManager = new EntityManager( this );
+			SystemManager = new SystemManager( this );
+			TagManager = new TagManager();
+			GroupManager = new GroupManager();
+			PoolCleanupDelay = 10;
+			if ( initializeAll )
+				InitializeAll( processAttributes );
 		}
 
 		public Dictionary<IEntity, ListEx<IComponent>> CurrentState
@@ -52,11 +64,11 @@ namespace RD.GameEngine.ECS
 
 		public float DeltaTime { get; private set; }
 
-		public IEntityManager EntityManager { get; private set; }
-		public IGroupManager GroupManager { get; private set; }
+		public EntityManager EntityManager { get; private set; }
+		public GroupManager GroupManager { get; private set; }
 		public int PoolCleanupDelay { get; set; }
-		public ISystemManager SystemManager { get; private set; }
-		public ITagManager TagManager { get; private set; }
+		public SystemManager SystemManager { get; private set; }
+		public TagManager TagManager { get; private set; }
 		internal bool IsSortedEntities { get; private set; }
 
 		public void Clear()
@@ -81,6 +93,54 @@ namespace RD.GameEngine.ECS
 			return CreateEntityFromTemplate( (long?) entityUniqueId, entityTemplateTag, templateArgs );
 		}
 
+		public void DeleteEntity( IEntity entity )
+		{
+			Debug.Assert( entity!=null,$"Entity must not be null." );
+			deleted.Add( entity );
+		}
+		public IComponent GetComponentFromPool( Type type )
+		{
+			Debug.Assert( type != null, $"Type must not be null.");
+
+			if ( !pools.ContainsKey( type ) )
+			{
+				throw new Exception($"There is no pool for the specified type {type}.");
+			}
+
+			return pools[ type ].New();
+		}
+		public T GetComponentFromPool<T>() where T : ComponentPoolable => (T) GetComponentFromPool( typeof(T) );
+
+		public IEntity GetEntity( int entityId )
+		{
+			Debug.Assert( entityId >= 0, $"Id must be at least 0." );
+
+			return EntityManager.GetEntity( entityId );
+		}
+
+		public IComponentPool<ComponentPoolable> GetPool( Type type )
+		{
+			Debug.Assert( type != null, $"Type must not be null." );
+
+			return pools[ type ];
+		}
+
+		public void InitializeAll( params Assembly[] assembliesToScan )
+		{
+			if ( !isInitialized )
+			{
+				bool processAttribute = assembliesToScan != null && assembliesToScan.Length > 0;
+				SystemManager.InitializeAll( processAttribute, assembliesToScan );
+				isInitialized = true;
+			}
+		}
+
+		public void InitializeAll( bool processAttributes = false )
+		{
+			SystemManager.InitializeAll( processAttributes );
+			isInitialized = true;
+		}
+
 		public IEntity LoadEntityState( string templateTag, string groupName, IEnumerable<IComponent> components, params object[] templateArgs )
 		{
 			Debug.Assert( components != null, $"Components must not be null." );
@@ -103,25 +163,26 @@ namespace RD.GameEngine.ECS
 
 			foreach ( IComponent component in components )
 			{
-				entity.AddComponent(component);
+				entity.AddComponent( component );
 			}
 
 			return entity;
 		}
-		
+
 		public void SetEntityTemplate( string entityTag, IEntityTemplate entityTemplate )
 		{
 			entityTemplates.Add( entityTag, entityTemplate );
 		}
+
 		public void SetPool( Type type, IComponentPool<ComponentPoolable> pool )
 		{
-			Debug.Assert( type != null,$"Type must not be null." );
-			Debug.Assert( pool !=null,$"ComponentPool must not be null." );
+			Debug.Assert( type != null, $"Type must not be null." );
+			Debug.Assert( pool != null, $"ComponentPool must not be null." );
 
 			pools.Add( type, pool );
 		}
-		
-		public void Update() => Update(Time.deltaTime);
+
+		public void Update() => Update( Time.deltaTime );
 
 		public void Update( float deltaTime )
 		{
@@ -147,8 +208,9 @@ namespace RD.GameEngine.ECS
 					TagManager.Unregister( entity );
 					GroupManager.Remove( entity );
 					EntityManager.Remove( entity );
-					DeletingState = false;
+					entity.DeletingState = false;
 				}
+
 				deleted.Clear();
 			}
 
@@ -161,6 +223,7 @@ namespace RD.GameEngine.ECS
 					EntityManager.Refresh( entity );
 					entity.RefreshingState = false;
 				}
+
 				refreshed.Clear();
 			}
 
@@ -183,8 +246,7 @@ namespace RD.GameEngine.ECS
 			Debug.Assert( !string.IsNullOrEmpty( entityTemplateTag ), $"Entity template tag must not be null or empty." );
 
 			IEntity entity = EntityManager.Create( entityUniqueId );
-			IEntityTemplate entityTemplate;
-			entityTemplates.TryGetValue( entityTemplateTag, out entityTemplate );
+			entityTemplates.TryGetValue( entityTemplateTag, out IEntityTemplate entityTemplate );
 
 			if ( entityTemplate == null )
 			{
@@ -196,49 +258,5 @@ namespace RD.GameEngine.ECS
 
 			return entity;
 		}
-	}
-
-	public class Entity
-	{
-	}
-
-	public interface IEntityTemplate
-	{
-		void TryGetValue( string entityTemplateTag, out IEntityTemplate entityTemplate );
-		IEntity BuildEntity( IEntity entity, World world, object[] templateArgs );
-	}
-
-	public interface IEntityManager
-	{
-		ListEx<IEntity> ActiveEntities { get; }
-		IEntity Create( long? entityUniqueId );
-		void RemoveMarkedComponents();
-		void Remove( IEntity entity );
-		void Refresh( IEntity entity );
-	}
-
-	public sealed class EntityManager
-	{
-		private ListEx<ListEx<IComponent>> componentsByType;
-		private readonly ListEx<Entity> removedAndAvailableEntities;
-		private readonly HashSet<Tuple<Entity, ComponentType>> componentsToBeRemoved = new HashSet<Tuple<Entity, ComponentType>>();
-	}
-
-	public interface IGroupManager
-	{
-		void Remove( IEntity entity );
-		void Set( string groupName, IEntity entity );
-	}
-
-	public interface ISystemManager
-	{
-		void TerminateAll();
-		void Draw();
-		void Update();
-	}
-
-	public interface ITagManager
-	{
-		void Unregister( IEntity entity );
 	}
 }

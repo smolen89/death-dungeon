@@ -1,4 +1,4 @@
-﻿namespace RD.GameEngine.ECS.Manager
+﻿namespace RD.GameEngine.ECS.Managers
 {
 	/// <summary>
 	/// Enumeration Type of Execution in a system Update.
